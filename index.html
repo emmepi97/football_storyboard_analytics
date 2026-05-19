@@ -1,704 +1,953 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlayerLab Ultimate</title>
 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>Football Career Analytics</title>
-
-<!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
-
-<!-- SheetJS -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.js"></script>
 
 <style>
-
-body {
-background: #f4f7fb;
-font-family: Arial, sans-serif;
-color: #1e293b;
+body{
+  background:#f5f7fb;
+  font-family:Arial,sans-serif;
+  color:#1e293b;
 }
-
-.card {
-background: white;
-border-radius: 24px;
-padding: 24px;
-box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-border: 1px solid #e2e8f0;
+.card{
+  background:white;
+  border-radius:24px;
+  padding:24px;
+  border:1px solid #e2e8f0;
+  box-shadow:0 4px 10px rgba(0,0,0,.04);
 }
-
-table {
-width: 100%;
-border-collapse: collapse;
+.sidebar-item{
+  padding:12px 16px;
+  border-radius:14px;
+  cursor:pointer;
 }
-
-th {
-text-align: left;
-padding: 14px;
-background: #f8fafc;
-color: #475569;
-font-size: 14px;
+.sidebar-item:hover{
+  background:#f1f5f9;
 }
-
-td {
-padding: 14px;
-border-top: 1px solid #e2e8f0;
-font-size: 14px;
+table{
+  width:100%;
+  border-collapse:collapse;
 }
-
-tr:hover {
-background: #f8fafc;
+th,td{
+  padding:12px;
+  border-bottom:1px solid #e2e8f0;
+  text-align:left;
+  font-size:14px;
 }
-
+th{
+  background:#f8fafc;
+}
+.kpi{
+  transition:all .2s;
+}
+.kpi:hover{
+  transform:translateY(-3px);
+}
 </style>
 
 </head>
+<body>
 
-<body class="p-6">
+<div class="flex">
 
-<div class="max-w-7xl mx-auto">
+  <aside class="hidden lg:block w-72 min-h-screen bg-white border-r border-slate-200 p-6 sticky top-0">
 
-<!-- HERO -->
+    <h1 class="text-4xl font-bold mb-2">PlayerLab</h1>
+    <p class="text-slate-500 mb-8">
+      Football Development Analytics
+    </p>
 
-<div class="mb-10">
+    <div class="space-y-2">
 
-<h1 class="text-5xl font-bold mb-4 text-slate-800">
-Football Career Analytics
-</h1>
+      <div class="sidebar-item">Overview</div>
+      <div class="sidebar-item">Performance</div>
+      <div class="sidebar-item">Training</div>
+      <div class="sidebar-item">Development</div>
+      <div class="sidebar-item">Insights</div>
+      <div class="sidebar-item">History</div>
 
-<p class="text-slate-500 text-xl max-w-3xl">
-Turn your football career into professional analytics.
-Upload your Excel file and instantly visualize your statistics,
-performances and career journey.
-</p>
+    </div>
 
-</div>
+  </aside>
 
-<!-- UPLOAD -->
+  <main class="flex-1 p-5">
 
-<div class="card mb-8">
+    <!-- HERO -->
 
-<h2 class="text-2xl font-semibold mb-6">
-Upload Career File
-</h2>
+    <div class="mb-10">
 
-<input
-type="file"
-id="excelFile"
-accept=".xlsx,.xls,.csv"
-class="block w-full border border-slate-300 rounded-xl p-4"
-/>
+      <div class="card bg-gradient-to-r from-slate-900 to-slate-700 text-white">
 
-<div class="mt-6 flex flex-col md:flex-row gap-4">
+        <h1 class="text-5xl font-bold mb-4">
+          Track Your Football Journey
+        </h1>
 
-<button
-onclick="downloadTemplate()"
-class="bg-slate-800 text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition"
->
-Download Example Template
-</button>
+        <p class="text-xl text-slate-200 max-w-3xl">
+          Analyze your matches, training sessions,
+          performance evolution and football growth.
+        </p>
 
-<div class="text-slate-500 flex items-center">
-Required columns:
-Date, Team, Opponent, Goals, Assists,
-Rating, Minutes, Outcome, Starter,
-PhysicalCondition, YellowCards, RedCards
-</div>
+      </div>
 
-</div>
+    </div>
 
-</div>
+    <!-- UPLOAD -->
 
-<!-- OVERVIEW -->
+    <div class="card mb-8">
 
-<div
-id="overview"
-class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-10"
-></div>
+      <div class="flex flex-col lg:flex-row gap-6 lg:items-center lg:justify-between">
 
-<!-- CHARTS -->
+        <div>
+          <h2 class="text-3xl font-semibold mb-2">
+            Upload Career File
+          </h2>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+          <p class="text-slate-500">
+            Upload an Excel or CSV file to generate your analytics dashboard.
+          </p>
+        </div>
 
-<div class="card">
+        <div class="flex flex-wrap gap-4">
 
-<h2 class="text-2xl font-semibold mb-5">
-Goals Over Time
-</h2>
+          <input
+            type="file"
+            id="excelFile"
+            accept=".xlsx,.xls,.csv"
+            class="border border-slate-300 rounded-xl p-3"
+          />
 
-<canvas id="goalsChart"></canvas>
+          <button
+            onclick="downloadTemplate()"
+            class="bg-slate-900 text-white px-6 py-3 rounded-xl font-semibold"
+          >
+            Download Template
+          </button>
 
-</div>
+          <button
+            onclick="exportDashboard()"
+            class="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold"
+          >
+            Export JSON
+          </button>
 
-<div class="card">
+        </div>
 
-<h2 class="text-2xl font-semibold mb-5">
-Rating Trend
-</h2>
+      </div>
 
-<canvas id="ratingChart"></canvas>
+    </div>
 
-</div>
+    <!-- FILTERS -->
 
-<div class="card lg:col-span-2">
+    <div class="card mb-8">
 
-<h2 class="text-2xl font-semibold mb-5">
-Physical Condition Trend
-</h2>
+      <h2 class="text-2xl font-semibold mb-5">
+        Advanced Filters
+      </h2>
 
-<canvas id="physicalChart"></canvas>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
 
-</div>
+        <select id="sessionFilter" class="border border-slate-300 rounded-xl p-3">
+          <option value="">All Sessions</option>
+          <option value="Match">Match</option>
+          <option value="Training">Training</option>
+        </select>
 
-</div>
+        <select id="starterFilter" class="border border-slate-300 rounded-xl p-3">
+          <option value="">All Roles</option>
+          <option value="Yes">Starter</option>
+          <option value="No">Substitute</option>
+        </select>
 
-<!-- INSIGHTS -->
+        <select id="outcomeFilter" class="border border-slate-300 rounded-xl p-3">
+          <option value="">All Outcomes</option>
+          <option value="Win">Win</option>
+          <option value="Draw">Draw</option>
+          <option value="Loss">Loss</option>
+        </select>
 
-<div class="card mb-10">
+        <input type="date" id="startDate" class="border border-slate-300 rounded-xl p-3">
 
-<h2 class="text-2xl font-semibold mb-6">
-Career Insights
-</h2>
+        <input type="date" id="endDate" class="border border-slate-300 rounded-xl p-3">
 
-<div
-id="insights"
-class="grid grid-cols-1 md:grid-cols-2 gap-4"
-></div>
+        <button
+          onclick="applyFilters()"
+          class="bg-slate-900 text-white rounded-xl"
+        >
+          Apply
+        </button>
 
-</div>
+      </div>
 
-<!-- MATCH HISTORY -->
+    </div>
 
-<div class="card">
+    <!-- KPI -->
 
-<div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
+    <div id="overview" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 mb-10"></div>
 
-<h2 class="text-2xl font-semibold">
-Match History
-</h2>
+    <!-- CHARTS -->
 
-<input
-type="text"
-id="searchInput"
-placeholder="Search matches..."
-class="border border-slate-300 rounded-xl px-4 py-3 w-full md:w-80"
-/>
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-10">
 
-</div>
+      <div class="card">
+        <h2 class="text-2xl font-semibold mb-4">Goals Over Time</h2>
+        <canvas id="goalsChart"></canvas>
+      </div>
 
-<div class="overflow-auto">
+      <div class="card">
+        <h2 class="text-2xl font-semibold mb-4">Rating Trend</h2>
+        <canvas id="ratingChart"></canvas>
+      </div>
 
-<table>
+      <div class="card">
+        <h2 class="text-2xl font-semibold mb-4">Physical Condition</h2>
+        <canvas id="physicalChart"></canvas>
+      </div>
 
-<thead>
+      <div class="card">
+        <h2 class="text-2xl font-semibold mb-4">Performance Radar</h2>
+        <canvas id="radarChart"></canvas>
+      </div>
 
-<tr>
-<th>Date</th>
-<th>Team</th>
-<th>Opponent</th>
-<th>Goals</th>
-<th>Assists</th>
-<th>Rating</th>
-<th>Minutes</th>
-<th>Starter</th>
-<th>Physical</th>
-<th>YC</th>
-<th>RC</th>
-<th>Outcome</th>
-</tr>
+      <div class="card">
+        <h2 class="text-2xl font-semibold mb-4">Wins / Draws / Losses</h2>
+        <canvas id="outcomeChart"></canvas>
+      </div>
 
-</thead>
+      <div class="card">
+        <h2 class="text-2xl font-semibold mb-4">Training vs Match</h2>
+        <canvas id="sessionChart"></canvas>
+      </div>
 
-<tbody id="tableBody"></tbody>
+    </div>
 
-</table>
+    <!-- DEVELOPMENT -->
 
-</div>
+    <div class="card mb-10">
 
-</div>
+      <h2 class="text-3xl font-semibold mb-6">
+        Player Development
+      </h2>
+
+      <div
+        id="developmentInsights"
+        class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4"
+      ></div>
+
+    </div>
+
+    <!-- WORD CLOUD -->
+
+    <div class="card mb-10">
+
+      <h2 class="text-3xl font-semibold mb-6">
+        Notes Word Cloud
+      </h2>
+
+      <canvas id="wordCloud" width="1000" height="350"></canvas>
+
+    </div>
+
+    <!-- HISTORY -->
+
+    <div class="card">
+
+      <div class="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between mb-6">
+
+        <h2 class="text-3xl font-semibold">
+          Session History
+        </h2>
+
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search..."
+          class="border border-slate-300 rounded-xl px-4 py-3 w-full lg:w-80"
+        />
+
+      </div>
+
+      <div class="overflow-auto">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>Date</th>
+              <th>Type</th>
+              <th>Team</th>
+              <th>Opponent</th>
+              <th>Goals</th>
+              <th>Assists</th>
+              <th>Rating</th>
+              <th>Physical</th>
+              <th>Mental</th>
+              <th>Confidence</th>
+              <th>Passing</th>
+              <th>Finishing</th>
+              <th>Minutes</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="tableBody"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </main>
 
 </div>
 
 <script>
 
-let allMatches = [];
+let allData = [];
+let filteredData = [];
 
-let goalsChartInstance;
-let ratingChartInstance;
-let physicalChartInstance;
+const charts = {};
+
+function destroyChart(id){
+  if(charts[id]){
+    charts[id].destroy();
+  }
+}
 
 document
-.getElementById("excelFile")
-.addEventListener("change", handleFile);
+  .getElementById("excelFile")
+  .addEventListener("change", handleFile);
 
-function handleFile(e) {
+document
+  .getElementById("searchInput")
+  .addEventListener("input", searchTable);
 
-const file = e.target.files[0];
+function handleFile(e){
 
-if (!file) return;
+  const file = e.target.files[0];
 
-const reader = new FileReader();
+  if(!file) return;
 
-reader.onload = function(event) {
+  const reader = new FileReader();
 
-const data = new Uint8Array(event.target.result);
+  reader.onload = function(event){
 
-const workbook = XLSX.read(data, {
-type: "array"
-});
+    const data = new Uint8Array(event.target.result);
 
-const sheet =
-workbook.Sheets[workbook.SheetNames[0]];
+    const workbook = XLSX.read(data,{
+      type:"array"
+    });
 
-const json =
-XLSX.utils.sheet_to_json(sheet);
+    const sheet =
+      workbook.Sheets[workbook.SheetNames[0]];
 
-allMatches = json;
+    const json =
+      XLSX.utils.sheet_to_json(sheet);
 
-generateDashboard(json);
+    allData = json;
+    filteredData = json;
+
+    localStorage.setItem(
+      "playerlab-data",
+      JSON.stringify(json)
+    );
+
+    updateDashboard(filteredData);
+
+  };
+
+  reader.readAsArrayBuffer(file);
+
+}
+
+window.onload = function(){
+
+  const saved =
+    localStorage.getItem("playerlab-data");
+
+  if(saved){
+
+    allData = JSON.parse(saved);
+    filteredData = allData;
+
+    updateDashboard(filteredData);
+
+  }
 
 };
 
-reader.readAsArrayBuffer(file);
+function applyFilters(){
+
+  const session =
+    document.getElementById("sessionFilter").value;
+
+  const starter =
+    document.getElementById("starterFilter").value;
+
+  const outcome =
+    document.getElementById("outcomeFilter").value;
+
+  const startDate =
+    document.getElementById("startDate").value;
+
+  const endDate =
+    document.getElementById("endDate").value;
+
+  filteredData = allData.filter(item=>{
+
+    let valid = true;
+
+    if(session && item.SessionType !== session)
+      valid = false;
+
+    if(starter && item.Starter !== starter)
+      valid = false;
+
+    if(outcome && item.Outcome !== outcome)
+      valid = false;
+
+    if(startDate && item.Date < startDate)
+      valid = false;
+
+    if(endDate && item.Date > endDate)
+      valid = false;
+
+    return valid;
+
+  });
+
+  updateDashboard(filteredData);
 
 }
 
-function generateDashboard(matches) {
+function updateDashboard(data){
 
-generateOverview(matches);
-
-generateTable(matches);
-
-generateInsights(matches);
-
-generateCharts(matches);
+  generateOverview(data);
+  generateCharts(data);
+  generateDevelopment(data);
+  generateWordCloud(data);
+  generateTable(data);
 
 }
 
-function generateOverview(matches) {
+function generateOverview(data){
 
-const totalMatches = matches.length;
+  const goals = sum(data,"Goals");
+  const assists = sum(data,"Assists");
+  const matches = data.length;
+  const rating = average(data,"Rating");
 
-const totalGoals = sum(matches, "Goals");
+  const overall =
+    (
+      (
+        Number(rating)*10 +
+        goals +
+        assists +
+        consistencyScore(data)
+      ) / 4
+    ).toFixed(0);
 
-const totalAssists = sum(matches, "Assists");
+  const cards = [
 
-const totalMinutes = sum(matches, "Minutes");
+    ["Overall", overall],
+    ["Sessions", matches],
+    ["Goals", goals],
+    ["Assists", assists],
+    ["Avg Rating", rating],
+    ["Physical", average(data,"PhysicalCondition")],
+    ["Confidence", average(data,"Confidence")],
+    ["Goals / 90", goalsPer90(data)]
 
-const avgRating = average(matches, "Rating");
+  ];
 
-const avgPhysical =
-average(matches, "PhysicalCondition");
+  document.getElementById("overview").innerHTML =
+    cards.map(card=>`
 
-const yellowCards =
-sum(matches, "YellowCards");
+      <div class="card kpi">
 
-const redCards =
-sum(matches, "RedCards");
+        <p class="text-slate-500 text-sm mb-3 uppercase tracking-wide">
+          ${card[0]}
+        </p>
 
-const starterMatches = matches.filter(
-m =>
-String(m.Starter).toLowerCase() === "yes"
-).length;
+        <h3 class="text-5xl font-bold">
+          ${card[1]}
+        </h3>
 
-const wins = matches.filter(
-m =>
-String(m.Outcome).toLowerCase() === "win"
-).length;
+      </div>
 
-const winRate =
-totalMatches > 0
-? ((wins / totalMatches) * 100).toFixed(1)
-: 0;
-
-const cards = [
-
-{
-title: "Matches",
-value: totalMatches
-},
-
-{
-title: "Goals",
-value: totalGoals
-},
-
-{
-title: "Assists",
-value: totalAssists
-},
-
-{
-title: "Avg Rating",
-value: avgRating
-},
-
-{
-title: "Minutes",
-value: totalMinutes
-},
-
-{
-title: "Avg Physical",
-value: avgPhysical
-},
-
-{
-title: "Starter Matches",
-value: starterMatches
-},
-
-{
-title: "Wins",
-value: wins
-},
-
-{
-title: "Win Rate",
-value: winRate + "%"
-},
-
-{
-title: "Yellow Cards",
-value: yellowCards
-},
-
-{
-title: "Red Cards",
-value: redCards
-}
-
-];
-
-document.getElementById("overview").innerHTML =
-cards.map(card => `
-
-<div class="card">
-
-<p class="text-slate-500 mb-3 text-sm uppercase tracking-wide">
-${card.title}
-</p>
-
-<h3 class="text-5xl font-bold text-slate-800">
-${card.value}
-</h3>
-
-</div>
-
-`).join("");
+    `).join("");
 
 }
 
-function generateTable(matches) {
+function generateCharts(data){
 
-const tbody =
-document.getElementById("tableBody");
+  const labels =
+    data.map(d=>d.Date);
 
-tbody.innerHTML = matches.map(match => `
+  lineChart(
+    "goalsChart",
+    labels,
+    data.map(d=>Number(d.Goals||0)),
+    "Goals"
+  );
 
-<tr>
+  lineChart(
+    "ratingChart",
+    labels,
+    data.map(d=>Number(d.Rating||0)),
+    "Rating"
+  );
 
-<td>${match.Date || ""}</td>
+  lineChart(
+    "physicalChart",
+    labels,
+    data.map(d=>Number(d.PhysicalCondition||0)),
+    "Physical"
+  );
 
-<td>${match.Team || ""}</td>
+  radarChart(data);
 
-<td>${match.Opponent || ""}</td>
+  outcomeChart(data);
 
-<td>${match.Goals || 0}</td>
-
-<td>${match.Assists || 0}</td>
-
-<td>${match.Rating || "-"}</td>
-
-<td>${match.Minutes || 0}</td>
-
-<td>${match.Starter || ""}</td>
-
-<td>${match.PhysicalCondition || ""}</td>
-
-<td>${match.YellowCards || 0}</td>
-
-<td>${match.RedCards || 0}</td>
-
-<td>${match.Outcome || ""}</td>
-
-</tr>
-
-`).join("");
+  sessionChart(data);
 
 }
 
-function generateInsights(matches) {
+function lineChart(id,labels,values,label){
 
-if (!matches.length) return;
+  destroyChart(id);
 
-const bestGame = matches.reduce((a, b) =>
-Number(a.Rating || 0) >
-Number(b.Rating || 0)
-? a
-: b
-);
+  charts[id] = new Chart(
+    document.getElementById(id),
+    {
+      type:"line",
 
-const goals =
-sum(matches, "Goals");
-
-const assists =
-sum(matches, "Assists");
-
-const avgPhysical =
-average(matches, "PhysicalCondition");
-
-const starterGames = matches.filter(
-m =>
-String(m.Starter).toLowerCase() === "yes"
-).length;
-
-const insights = [
-
-`⚽ Total goal contributions: ${goals + assists}`,
-
-`🔥 Highest rating: ${bestGame.Rating}`,
-
-`🏆 Best match: ${bestGame.Team} vs ${bestGame.Opponent}`,
-
-`🎯 Goals scored: ${goals}`,
-
-`🅰️ Assists made: ${assists}`,
-
-`💪 Average physical condition: ${avgPhysical}`,
-
-`📋 Matches as starter: ${starterGames}`
-
-];
-
-document.getElementById("insights").innerHTML =
-insights.map(insight => `
-
-<div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
-
-${insight}
-
-</div>
-
-`).join("");
+      data:{
+        labels:labels,
+        datasets:[{
+          label:label,
+          data:values,
+          borderWidth:3,
+          tension:.4
+        }]
+      }
+    }
+  );
 
 }
 
-function generateCharts(matches) {
+function radarChart(data){
 
-const labels =
-matches.map(m => m.Date);
+  destroyChart("radarChart");
 
-const goalsData =
-matches.map(m =>
-Number(m.Goals || 0)
-);
+  charts["radarChart"] = new Chart(
+    document.getElementById("radarChart"),
+    {
+      type:"radar",
 
-const ratingData =
-matches.map(m =>
-Number(m.Rating || 0)
-);
+      data:{
+        labels:[
+          "Passing",
+          "Finishing",
+          "Defense",
+          "Sprint",
+          "Confidence"
+        ],
 
-const physicalData =
-matches.map(m =>
-Number(m.PhysicalCondition || 0)
-);
-
-if (goalsChartInstance)
-goalsChartInstance.destroy();
-
-if (ratingChartInstance)
-ratingChartInstance.destroy();
-
-if (physicalChartInstance)
-physicalChartInstance.destroy();
-
-goalsChartInstance = new Chart(
-
-document.getElementById("goalsChart"),
-
-{
-type: "line",
-
-data: {
-
-labels: labels,
-
-datasets: [
-
-{
-label: "Goals",
-data: goalsData,
-borderWidth: 3,
-tension: 0.4
-}
-
-]
+        datasets:[{
+          label:"Player Profile",
+          data:[
+            average(data,"PassingQuality"),
+            average(data,"FinishingQuality"),
+            average(data,"DefensivePerformance"),
+            average(data,"SprintLevel"),
+            average(data,"Confidence")
+          ]
+        }]
+      }
+    }
+  );
 
 }
 
-}
+function outcomeChart(data){
 
-);
+  destroyChart("outcomeChart");
 
-ratingChartInstance = new Chart(
+  charts["outcomeChart"] = new Chart(
+    document.getElementById("outcomeChart"),
+    {
+      type:"doughnut",
 
-document.getElementById("ratingChart"),
-
-{
-type: "line",
-
-data: {
-
-labels: labels,
-
-datasets: [
-
-{
-label: "Rating",
-data: ratingData,
-borderWidth: 3,
-tension: 0.4
-}
-
-]
+      data:{
+        labels:["Wins","Draws","Losses"],
+        datasets:[{
+          data:[
+            data.filter(d=>d.Outcome==="Win").length,
+            data.filter(d=>d.Outcome==="Draw").length,
+            data.filter(d=>d.Outcome==="Loss").length
+          ]
+        }]
+      }
+    }
+  );
 
 }
 
-}
+function sessionChart(data){
 
-);
+  destroyChart("sessionChart");
 
-physicalChartInstance = new Chart(
+  charts["sessionChart"] = new Chart(
+    document.getElementById("sessionChart"),
+    {
+      type:"pie",
 
-document.getElementById("physicalChart"),
-
-{
-type: "line",
-
-data: {
-
-labels: labels,
-
-datasets: [
-
-{
-label: "Physical Condition",
-data: physicalData,
-borderWidth: 3,
-tension: 0.4
-}
-
-]
+      data:{
+        labels:["Matches","Training"],
+        datasets:[{
+          data:[
+            data.filter(d=>d.SessionType==="Match").length,
+            data.filter(d=>d.SessionType==="Training").length
+          ]
+        }]
+      }
+    }
+  );
 
 }
 
+function generateDevelopment(data){
+
+  const insights = [
+
+    ["Passing Evolution",trend(data,"PassingQuality")],
+    ["Finishing Evolution",trend(data,"FinishingQuality")],
+    ["Confidence Trend",trend(data,"Confidence")],
+    ["Sprint Level",trend(data,"SprintLevel")],
+    ["Consistency Score",consistencyScore(data)],
+    ["Recovery Trend",trend(data,"RecoveryLevel")],
+    ["Best Position",bestPosition(data)],
+    ["Best Opponent",bestOpponent(data)]
+
+  ];
+
+  document.getElementById("developmentInsights").innerHTML =
+    insights.map(i=>`
+
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
+
+        <p class="text-slate-500 text-sm mb-2">
+          ${i[0]}
+        </p>
+
+        <h3 class="text-3xl font-bold">
+          ${i[1]}
+        </h3>
+
+      </div>
+
+    `).join("");
+
 }
 
-);
+function generateWordCloud(data){
+
+  const stopwords = [
+    "the","and","a","of","to","in","on","good","great"
+  ];
+
+  const text =
+    data.map(d=>d.Notes||"").join(" ");
+
+  const words =
+    text.toLowerCase().split(/\s+/);
+
+  const freq = {};
+
+  words.forEach(word=>{
+
+    const clean =
+      word.replace(/[^a-z]/g,"");
+
+    if(clean.length < 3) return;
+    if(stopwords.includes(clean)) return;
+
+    freq[clean] =
+      (freq[clean] || 0) + 1;
+
+  });
+
+  const list =
+    Object.entries(freq);
+
+  WordCloud(
+    document.getElementById("wordCloud"),
+    {
+      list:list,
+      gridSize:12,
+      weightFactor:10
+    }
+  );
 
 }
 
-function sum(arr, key) {
+function generateTable(data){
 
-return arr.reduce(
-(acc, item) =>
-acc + Number(item[key] || 0),
-0
-);
+  document.getElementById("tableBody").innerHTML =
+    data.map(item=>`
+
+      <tr>
+
+        <td>${item.Date||""}</td>
+        <td>${item.SessionType||""}</td>
+        <td>${item.Team||""}</td>
+        <td>${item.Opponent||""}</td>
+        <td>${item.Goals||0}</td>
+        <td>${item.Assists||0}</td>
+        <td>${item.Rating||0}</td>
+        <td>${item.PhysicalCondition||0}</td>
+        <td>${item.MentalCondition||0}</td>
+        <td>${item.Confidence||0}</td>
+        <td>${item.PassingQuality||0}</td>
+        <td>${item.FinishingQuality||0}</td>
+        <td>${item.Minutes||0}</td>
+
+      </tr>
+
+    `).join("");
 
 }
 
-function average(arr, key) {
+function searchTable(e){
 
-if (!arr.length) return 0;
+  const value =
+    e.target.value.toLowerCase();
 
-return (
-sum(arr, key) / arr.length
-).toFixed(2);
+  const filtered =
+    filteredData.filter(item=>
+      JSON.stringify(item)
+        .toLowerCase()
+        .includes(value)
+    );
+
+  generateTable(filtered);
 
 }
 
-document
-.getElementById("searchInput")
-.addEventListener("input", function(e) {
+function goalsPer90(data){
 
-const value =
-e.target.value.toLowerCase();
+  const goals = sum(data,"Goals");
+  const minutes = sum(data,"Minutes");
 
-const filtered = allMatches.filter(match =>
-JSON.stringify(match)
-.toLowerCase()
-.includes(value)
-);
+  if(minutes===0) return 0;
 
-generateTable(filtered);
+  return ((goals/minutes)*90).toFixed(2);
 
-});
-
-function downloadTemplate() {
-
-const exampleData = [
-
-{
-Date: "2025-01-12",
-Team: "Malva",
-Opponent: "Penna",
-Goals: 1,
-Assists: 1,
-Rating: 7.0,
-Minutes: 90,
-Outcome: "Win",
-Starter: "Yes",
-PhysicalCondition: 8,
-YellowCards: 1,
-RedCards: 0
-},
-
-{
-Date: "2025-01-19",
-Team: "Malva",
-Opponent: "Valdarno",
-Goals: 0,
-Assists: 2,
-Rating: 7.0,
-Minutes: 85,
-Outcome: "Draw",
-Starter: "No",
-PhysicalCondition: 6,
-YellowCards: 0,
-RedCards: 0
 }
 
-];
+function consistencyScore(data){
 
-const worksheet =
-XLSX.utils.json_to_sheet(exampleData);
+  const ratings =
+    data.map(d=>Number(d.Rating||0));
 
-const workbook =
-XLSX.utils.book_new();
+  if(!ratings.length) return 0;
 
-XLSX.utils.book_append_sheet(
-workbook,
-worksheet,
-"CareerData"
-);
+  const avg =
+    ratings.reduce((a,b)=>a+b,0)/ratings.length;
 
-XLSX.writeFile(
-workbook,
-"football-career-template.xlsx"
-);
+  const variance =
+    ratings.reduce((a,b)=>
+      a + Math.pow(b-avg,2),0
+    ) / ratings.length;
+
+  return (100 - variance).toFixed(0);
+
+}
+
+function bestPosition(data){
+
+  const map = {};
+
+  data.forEach(d=>{
+
+    const p = d.Position || "Unknown";
+
+    map[p] = (map[p]||0)+1;
+
+  });
+
+  return Object.keys(map).reduce((a,b)=>
+    map[a] > map[b] ? a : b
+  );
+
+}
+
+function bestOpponent(data){
+
+  const map = {};
+
+  data.forEach(d=>{
+
+    if(!d.Opponent) return;
+
+    map[d.Opponent] =
+      (map[d.Opponent]||0) + Number(d.Goals||0);
+
+  });
+
+  return Object.keys(map).reduce((a,b)=>
+    map[a] > map[b] ? a : b
+  ,"");
+
+}
+
+function sum(arr,key){
+
+  return arr.reduce(
+    (acc,item)=>
+      acc + Number(item[key]||0),
+    0
+  );
+
+}
+
+function average(arr,key){
+
+  if(!arr.length) return 0;
+
+  return (
+    sum(arr,key) / arr.length
+  ).toFixed(1);
+
+}
+
+function trend(arr,key){
+
+  if(arr.length < 2)
+    return "Stable";
+
+  const first =
+    Number(arr[0][key] || 0);
+
+  const last =
+    Number(arr[arr.length-1][key] || 0);
+
+  if(last > first)
+    return "Improving";
+
+  if(last < first)
+    return "Declining";
+
+  return "Stable";
+
+}
+
+function exportDashboard(){
+
+  const data =
+    JSON.stringify(filteredData,null,2);
+
+  const blob =
+    new Blob([data],{
+      type:"application/json"
+    });
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+  a.download = "playerlab-export.json";
+  a.click();
+
+}
+
+function downloadTemplate(){
+
+  const exampleData = [
+
+    {
+      Date:"2025-01-12",
+      SessionType:"Match",
+      Team:"Malva",
+      Opponent:"Gaiole",
+      Position:"CM",
+      Starter:"Yes",
+      Goals:1,
+      Assists:1,
+      Rating:7.5,
+      PhysicalCondition:8,
+      MentalCondition:7,
+      SprintLevel:8,
+      PassingQuality:7,
+      DefensivePerformance:6,
+      FinishingQuality:8,
+      Confidence:8,
+      RecoveryLevel:7,
+      Minutes:90,
+      Outcome:"Win",
+      Notes:"Great second half"
+    },
+
+    {
+      Date:"2025-01-15",
+      SessionType:"Training",
+      Team:"Malva",
+      Opponent:"",
+      Position:"CM",
+      Starter:"No",
+      Goals:0,
+      Assists:0,
+      Rating:6.5,
+      PhysicalCondition:7,
+      MentalCondition:8,
+      SprintLevel:9,
+      PassingQuality:8,
+      DefensivePerformance:7,
+      FinishingQuality:7,
+      Confidence:8,
+      RecoveryLevel:8,
+      Minutes:90,
+      Outcome:"",
+      Notes:"Intense passing training"
+    }
+
+  ];
+
+  const worksheet =
+    XLSX.utils.json_to_sheet(exampleData);
+
+  const workbook =
+    XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(
+    workbook,
+    worksheet,
+    "PlayerLab"
+  );
+
+  XLSX.writeFile(
+    workbook,
+    "playerlab-template.xlsx"
+  );
 
 }
 
 </script>
 
 </body>
-
 </html>

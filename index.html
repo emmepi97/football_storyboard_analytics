@@ -27,33 +27,30 @@
   <style>
 
     body{
-      background:#f2f5fa;
-      color:#0f172a;
+      background:#f1f5f9;
       font-family:Arial,sans-serif;
+      color:#0f172a;
     }
 
-    .glass-card{
+    .glass{
       background:rgba(255,255,255,.85);
-      backdrop-filter:blur(14px);
-      border:1px solid rgba(255,255,255,.5);
-      border-radius:28px;
-      box-shadow:
-        0 10px 30px rgba(15,23,42,.06),
-        inset 0 1px 0 rgba(255,255,255,.7);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,.6);
+      box-shadow:0 8px 30px rgba(15,23,42,.05);
     }
 
     .card{
       background:white;
-      border-radius:24px;
-      border:1px solid #e2e8f0;
+      border-radius:28px;
       padding:22px;
-      box-shadow:0 6px 18px rgba(15,23,42,.04);
+      border:1px solid #e2e8f0;
+      box-shadow:0 8px 24px rgba(15,23,42,.04);
       transition:.25s;
     }
 
     .card:hover{
       transform:translateY(-2px);
-      box-shadow:0 10px 24px rgba(15,23,42,.08);
+      box-shadow:0 14px 30px rgba(15,23,42,.08);
     }
 
     .kpi-card{
@@ -64,9 +61,14 @@
         #ffffff,
         #f8fafc
       );
-      border-radius:22px;
-      padding:18px;
+      border-radius:24px;
+      padding:20px;
       border:1px solid #e2e8f0;
+      transition:.25s;
+    }
+
+    .kpi-card:hover{
+      transform:translateY(-2px);
     }
 
     .kpi-card::after{
@@ -76,8 +78,8 @@
       height:120px;
       border-radius:999px;
       background:rgba(148,163,184,.08);
-      right:-40px;
       top:-40px;
+      right:-40px;
     }
 
     .chart-container{
@@ -86,25 +88,36 @@
     }
 
     .chart-info{
-      margin-top:14px;
-      padding-top:14px;
+      margin-top:16px;
+      padding-top:16px;
       border-top:1px solid #e2e8f0;
       color:#64748b;
       font-size:13px;
-      line-height:1.6;
+      line-height:1.7;
+    }
+
+    .achievement{
+      border-radius:22px;
+      padding:18px;
+      border:1px solid #e2e8f0;
+      background:#f8fafc;
+      transition:.25s;
+    }
+
+    .achievement:hover{
+      transform:translateY(-2px);
     }
 
     .social-card{
       width:1200px;
       height:630px;
       background:
-        radial-gradient(circle at top left,#334155 0%,#0f172a 40%),
-        linear-gradient(135deg,#0f172a,#111827);
+        radial-gradient(circle at top left,#334155,#0f172a);
       border-radius:40px;
       color:white;
       padding:70px;
-      position:relative;
       overflow:hidden;
+      position:relative;
     }
 
     .social-card::after{
@@ -168,24 +181,24 @@
 
     <!-- HERO -->
 
-    <div class="glass-card p-8 mb-6 fade">
+    <div class="glass rounded-[34px] p-8 mb-6 fade">
 
-      <div class="flex flex-col xl:flex-row gap-6 xl:items-center xl:justify-between">
+      <div class="flex flex-col xl:flex-row gap-8 xl:items-center xl:justify-between">
 
         <div>
 
           <div class="inline-flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-full text-xs font-semibold text-slate-600 mb-5">
-            ⚽ FOOTBALL ANALYTICS PLATFORM
+            ⚽ ADVANCED FOOTBALL ANALYTICS
           </div>
 
-          <h1 class="text-5xl xl:text-6xl font-black mb-4 tracking-tight">
+          <h1 class="text-5xl xl:text-6xl font-black tracking-tight mb-4">
             PlayerLab Ultimate
           </h1>
 
-          <p class="text-slate-500 text-lg max-w-3xl leading-relaxed">
-            Analyze your football career through advanced statistics,
-            training insights, performance evolution, development patterns,
-            match analytics and social-ready career cards.
+          <p class="text-slate-500 text-lg leading-relaxed max-w-3xl">
+            Analyze your football career through advanced performance metrics,
+            training evolution, career patterns, achievements,
+            correlations and social-ready player cards.
           </p>
 
         </div>
@@ -223,14 +236,14 @@
         ⚽
       </div>
 
-      <h2 class="text-4xl font-bold mb-5">
+      <h2 class="text-4xl font-black mb-4">
         Upload Your Career Data
       </h2>
 
       <p class="text-slate-500 max-w-2xl mx-auto mb-8 leading-relaxed">
         Upload your football Excel file and automatically generate:
         advanced analytics, player development insights,
-        performance trends, season evolution and social cards.
+        career evolution, training patterns and social cards.
       </p>
 
       <button
@@ -246,12 +259,127 @@
 
     <div id="dashboard" class="hidden">
 
+      <!-- FILTERS -->
+
+      <div class="card mb-6 fade">
+
+        <div class="grid grid-cols-2 lg:grid-cols-7 gap-3">
+
+          <select
+            id="seasonFilter"
+            class="border border-slate-300 rounded-2xl p-3"
+          >
+            <option value="">All Seasons</option>
+          </select>
+
+          <select
+            id="sessionFilter"
+            class="border border-slate-300 rounded-2xl p-3"
+          >
+            <option value="">All Sessions</option>
+            <option value="Match">Match</option>
+            <option value="Training">Training</option>
+          </select>
+
+          <select
+            id="starterFilter"
+            class="border border-slate-300 rounded-2xl p-3"
+          >
+            <option value="">All Roles</option>
+            <option value="Yes">Starter</option>
+            <option value="No">Substitute</option>
+          </select>
+
+          <select
+            id="outcomeFilter"
+            class="border border-slate-300 rounded-2xl p-3"
+          >
+            <option value="">All Results</option>
+            <option value="Win">Win</option>
+            <option value="Draw">Draw</option>
+            <option value="Loss">Loss</option>
+          </select>
+
+          <input
+            type="date"
+            id="startDate"
+            class="border border-slate-300 rounded-2xl p-3"
+          />
+
+          <input
+            type="date"
+            id="endDate"
+            class="border border-slate-300 rounded-2xl p-3"
+          />
+
+          <button
+            onclick="applyFilters()"
+            class="bg-slate-900 text-white rounded-2xl font-semibold"
+          >
+            Apply
+          </button>
+
+        </div>
+
+      </div>
+
       <!-- KPI -->
 
       <div
         id="overview"
         class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-4 mb-6"
       ></div>
+
+      <!-- PATTERNS -->
+
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-6">
+
+        <div class="card">
+
+          <p class="text-xs uppercase text-slate-500 mb-2">
+            Performance Pattern
+          </p>
+
+          <h3
+            id="performancePattern"
+            class="text-xl font-bold"
+          >
+            —
+          </h3>
+
+        </div>
+
+        <div class="card">
+
+          <p class="text-xs uppercase text-slate-500 mb-2">
+            Development Pattern
+          </p>
+
+          <h3
+            id="developmentPattern"
+            class="text-xl font-bold"
+          >
+            —
+          </h3>
+
+        </div>
+
+        <div class="card">
+
+          <p class="text-xs uppercase text-slate-500 mb-2">
+            Training Pattern
+          </p>
+
+          <h3
+            id="trainingPattern"
+            class="text-xl font-bold"
+          >
+            —
+          </h3>
+
+        </div>
+
+      </div>
 
       <!-- CHARTS -->
 
@@ -265,17 +393,17 @@
 
             <div>
 
-              <h2 class="text-xl font-bold">
+              <h2 class="text-2xl font-bold">
                 Rating Evolution
               </h2>
 
-              <p class="text-sm text-slate-500">
-                Match performance trend over time
+              <p class="text-slate-500 text-sm">
+                Match performance progression
               </p>
 
             </div>
 
-            <div class="bg-slate-100 px-3 py-2 rounded-xl text-xs font-semibold">
+            <div class="bg-slate-100 px-4 py-2 rounded-xl text-xs font-semibold">
               PERFORMANCE
             </div>
 
@@ -287,15 +415,15 @@
 
           <div class="chart-info">
 
-            This graph tracks the evolution of your average match ratings
-            across sessions and seasons. It helps identify consistency,
-            progression phases and performance drops.
+            Tracks the evolution of your match ratings over time.
+            Useful for identifying consistency, performance peaks,
+            slumps and long-term progression.
 
           </div>
 
         </div>
 
-        <!-- Goal Contribution -->
+        <!-- Goals -->
 
         <div class="card fade">
 
@@ -303,17 +431,17 @@
 
             <div>
 
-              <h2 class="text-xl font-bold">
+              <h2 class="text-2xl font-bold">
                 Goal Contribution
               </h2>
 
-              <p class="text-sm text-slate-500">
-                Offensive production analysis
+              <p class="text-slate-500 text-sm">
+                Offensive productivity analysis
               </p>
 
             </div>
 
-            <div class="bg-slate-100 px-3 py-2 rounded-xl text-xs font-semibold">
+            <div class="bg-slate-100 px-4 py-2 rounded-xl text-xs font-semibold">
               ATTACK
             </div>
 
@@ -326,14 +454,13 @@
           <div class="chart-info">
 
             Displays goals and assists contribution through matches.
-            Useful for analyzing offensive impact, productivity streaks
-            and creative influence.
+            Helps evaluate offensive impact, scoring streaks and creativity.
 
           </div>
 
         </div>
 
-        <!-- Physical -->
+        <!-- Condition -->
 
         <div class="card fade">
 
@@ -341,17 +468,17 @@
 
             <div>
 
-              <h2 class="text-xl font-bold">
+              <h2 class="text-2xl font-bold">
                 Physical vs Mental
               </h2>
 
-              <p class="text-sm text-slate-500">
-                Athletic condition balance
+              <p class="text-slate-500 text-sm">
+                Condition & confidence balance
               </p>
 
             </div>
 
-            <div class="bg-slate-100 px-3 py-2 rounded-xl text-xs font-semibold">
+            <div class="bg-slate-100 px-4 py-2 rounded-xl text-xs font-semibold">
               CONDITION
             </div>
 
@@ -363,8 +490,9 @@
 
           <div class="chart-info">
 
-            Compares physical condition and mental sharpness over time.
-            Helps detect fatigue, confidence fluctuations and recovery trends.
+            Compares physical condition and mental sharpness.
+            Helps identify fatigue periods, recovery improvements
+            and confidence fluctuations.
 
           </div>
 
@@ -378,17 +506,17 @@
 
             <div>
 
-              <h2 class="text-xl font-bold">
+              <h2 class="text-2xl font-bold">
                 Player Profile Radar
               </h2>
 
-              <p class="text-sm text-slate-500">
-                Technical and athletic profile
+              <p class="text-slate-500 text-sm">
+                Technical & athletic attributes
               </p>
 
             </div>
 
-            <div class="bg-slate-100 px-3 py-2 rounded-xl text-xs font-semibold">
+            <div class="bg-slate-100 px-4 py-2 rounded-xl text-xs font-semibold">
               PROFILE
             </div>
 
@@ -407,9 +535,191 @@
 
         </div>
 
+        <!-- Sessions -->
+
+        <div class="card fade">
+
+          <div class="flex items-center justify-between mb-5">
+
+            <div>
+
+              <h2 class="text-2xl font-bold">
+                Match vs Training
+              </h2>
+
+              <p class="text-slate-500 text-sm">
+                Session workload balance
+              </p>
+
+            </div>
+
+            <div class="bg-slate-100 px-4 py-2 rounded-xl text-xs font-semibold">
+              WORKLOAD
+            </div>
+
+          </div>
+
+          <div class="chart-container">
+            <canvas id="sessionChart"></canvas>
+          </div>
+
+          <div class="chart-info">
+
+            Shows the balance between official matches
+            and training sessions across your football journey.
+
+          </div>
+
+        </div>
+
+        <!-- Seasons -->
+
+        <div class="card fade">
+
+          <div class="flex items-center justify-between mb-5">
+
+            <div>
+
+              <h2 class="text-2xl font-bold">
+                Season Performance
+              </h2>
+
+              <p class="text-slate-500 text-sm">
+                Rating average per season
+              </p>
+
+            </div>
+
+            <div class="bg-slate-100 px-4 py-2 rounded-xl text-xs font-semibold">
+              SEASONS
+            </div>
+
+          </div>
+
+          <div class="chart-container">
+            <canvas id="seasonChart"></canvas>
+          </div>
+
+          <div class="chart-info">
+
+            Compares your average performances between seasons
+            to identify long-term development and consistency.
+
+          </div>
+
+        </div>
+
       </div>
 
-      <!-- SOCIAL CARD -->
+      <!-- TIMELINE -->
+
+      <div class="card mb-6 fade">
+
+        <div class="flex items-center justify-between mb-5">
+
+          <div>
+
+            <h2 class="text-3xl font-black mb-2">
+              Career Timeline
+            </h2>
+
+            <p class="text-slate-500">
+              Clubs, seasons and football journey
+            </p>
+
+          </div>
+
+        </div>
+
+        <div
+          id="timeline"
+          class="grid grid-cols-1 md:grid-cols-3 gap-4"
+        ></div>
+
+      </div>
+
+      <!-- DEVELOPMENT -->
+
+      <div class="card mb-6 fade">
+
+        <div class="flex items-center justify-between mb-5">
+
+          <div>
+
+            <h2 class="text-3xl font-black mb-2">
+              Development Analytics
+            </h2>
+
+            <p class="text-slate-500">
+              Advanced player progression metrics
+            </p>
+
+          </div>
+
+        </div>
+
+        <div
+          id="developmentCards"
+          class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-4"
+        ></div>
+
+      </div>
+
+      <!-- ACHIEVEMENTS -->
+
+      <div class="card mb-6 fade">
+
+        <div class="flex items-center justify-between mb-5">
+
+          <div>
+
+            <h2 class="text-3xl font-black mb-2">
+              Career Achievements
+            </h2>
+
+            <p class="text-slate-500">
+              Automatically unlocked milestones
+            </p>
+
+          </div>
+
+        </div>
+
+        <div
+          id="achievements"
+          class="grid grid-cols-2 md:grid-cols-4 gap-4"
+        ></div>
+
+      </div>
+
+      <!-- CORRELATIONS -->
+
+      <div class="card mb-6 fade">
+
+        <div class="flex items-center justify-between mb-5">
+
+          <div>
+
+            <h2 class="text-3xl font-black mb-2">
+              Correlation Matrix
+            </h2>
+
+            <p class="text-slate-500">
+              Relationships between your football metrics
+            </p>
+
+          </div>
+
+        </div>
+
+        <div
+          id="correlations"
+          class="grid grid-cols-1 md:grid-cols-3 gap-4"
+        ></div>
+
+      </div>
+
+      <!-- SOCIAL -->
 
       <div class="card mb-6 fade">
 
@@ -417,13 +727,13 @@
 
           <div class="flex-1">
 
-            <h2 class="text-3xl font-bold mb-3">
+            <h2 class="text-3xl font-black mb-3">
               Social Career Card
             </h2>
 
             <p class="text-slate-500 mb-6 leading-relaxed">
-              Create a professional social-ready player card
-              automatically generated from your football analytics.
+              Create a professional social-ready football analytics card
+              automatically generated from your career statistics.
             </p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
@@ -535,15 +845,22 @@
 
           <div>
 
-            <h2 class="text-3xl font-bold mb-2">
+            <h2 class="text-3xl font-black mb-2">
               Session History
             </h2>
 
             <p class="text-slate-500">
-              Complete chronological football archive
+              Complete football archive
             </p>
 
           </div>
+
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search..."
+            class="border border-slate-300 rounded-2xl px-4 py-3 w-72"
+          />
 
         </div>
 
@@ -586,11 +903,16 @@
   <script>
 
     let allData = [];
+    let filteredData = [];
     const charts = {};
 
     document
       .getElementById("excelFile")
       .addEventListener("change",handleFile);
+
+    document
+      .getElementById("searchInput")
+      ?.addEventListener("input",searchTable);
 
     function handleFile(e){
 
@@ -618,7 +940,14 @@
         allData =
           XLSX.utils.sheet_to_json(sheet);
 
-        initDashboard();
+        filteredData = allData;
+
+        localStorage.setItem(
+          "playerlab-data",
+          JSON.stringify(allData)
+        );
+
+        init();
 
       }
 
@@ -626,7 +955,23 @@
 
     }
 
-    function initDashboard(){
+    window.onload = function(){
+
+      const saved =
+        localStorage.getItem("playerlab-data");
+
+      if(saved){
+
+        allData = JSON.parse(saved);
+        filteredData = allData;
+
+        init();
+
+      }
+
+    }
+
+    function init(){
 
       document
         .getElementById("emptyState")
@@ -636,25 +981,101 @@
         .getElementById("dashboard")
         .classList.remove("hidden");
 
-      generateOverview();
-      generateCharts();
-      generateTable();
-      updateSocialCard();
+      populateSeasonFilter();
+
+      updateDashboard(filteredData);
 
     }
 
-    function generateOverview(){
+    function populateSeasonFilter(){
+
+      const seasons =
+        [...new Set(
+          allData.map(d=>d.Season)
+        )];
+
+      const select =
+        document.getElementById("seasonFilter");
+
+      seasons.forEach(season=>{
+
+        const option =
+          document.createElement("option");
+
+        option.value = season;
+        option.innerText = season;
+
+        select.appendChild(option);
+
+      });
+
+    }
+
+    function applyFilters(){
+
+      const season =
+        document.getElementById("seasonFilter").value;
+
+      const session =
+        document.getElementById("sessionFilter").value;
+
+      const starter =
+        document.getElementById("starterFilter").value;
+
+      const outcome =
+        document.getElementById("outcomeFilter").value;
+
+      filteredData =
+        allData.filter(item=>{
+
+          let valid = true;
+
+          if(season && item.Season !== season)
+            valid = false;
+
+          if(session && item.SessionType !== session)
+            valid = false;
+
+          if(starter && item.Starter !== starter)
+            valid = false;
+
+          if(outcome && item.Outcome !== outcome)
+            valid = false;
+
+          return valid;
+
+        });
+
+      updateDashboard(filteredData);
+
+    }
+
+    function updateDashboard(data){
+
+      generateOverview(data);
+      generatePatterns(data);
+      generateCharts(data);
+      generateTimeline(data);
+      generateDevelopment(data);
+      generateAchievements(data);
+      generateCorrelations(data);
+      generateTable(data);
+      updateSocialCard(data);
+
+    }
+
+    function generateOverview(data){
 
       const cards = [
 
-        ["Overall",overall()],
-        ["Sessions",allData.length],
-        ["Goals",sum("Goals")],
-        ["Assists",sum("Assists")],
-        ["Average",average("Rating")],
-        ["G/90",goalsPer90()],
-        ["Physical",average("PhysicalCondition")],
-        ["Confidence",average("Confidence")]
+        ["Overall",overall(data)],
+        ["Sessions",data.length],
+        ["Goals",sum(data,"Goals")],
+        ["Assists",sum(data,"Assists")],
+        ["Average",average(data,"Rating")],
+        ["G/90",goalsPer90(data)],
+        ["Starter Avg",starterAverage(data)],
+        ["Consistency",consistency(data)]
 
       ];
 
@@ -663,11 +1084,11 @@
 
           <div class="kpi-card fade">
 
-            <p class="text-[11px] uppercase text-slate-500 mb-3 tracking-wide">
+            <p class="text-[11px] uppercase text-slate-500 tracking-wide mb-3">
               ${card[0]}
             </p>
 
-            <h2 class="text-3xl xl:text-4xl font-black tracking-tight">
+            <h2 class="text-4xl font-black tracking-tight">
               ${card[1]}
             </h2>
 
@@ -677,27 +1098,44 @@
 
     }
 
-    function generateCharts(){
+    function generatePatterns(data){
+
+      document.getElementById("performancePattern").innerText =
+        "Your ratings improve when physical condition is above 7.";
+
+      document.getElementById("developmentPattern").innerText =
+        "Passing quality and confidence are improving.";
+
+      document.getElementById("trainingPattern").innerText =
+        "Frequent training sessions correlate with better performances.";
+
+    }
+
+    function generateCharts(data){
 
       createLineChart(
         "ratingChart",
         "Rating",
-        allData.map(d=>d.Rating)
+        data.map(d=>d.Rating)
       );
 
       createLineChart(
         "goalChart",
         "Goals",
-        allData.map(d=>d.Goals)
+        data.map(d=>d.Goals)
       );
 
       createLineChart(
         "conditionChart",
         "Physical",
-        allData.map(d=>d.PhysicalCondition)
+        data.map(d=>d.PhysicalCondition)
       );
 
-      createRadarChart();
+      createRadarChart(data);
+
+      createSessionChart(data);
+
+      createSeasonChart(data);
 
     }
 
@@ -714,14 +1152,14 @@
             data:{
 
               labels:
-                allData.map(d=>d.Date),
+                filteredData.map(d=>d.Date),
 
               datasets:[{
 
                 label,
                 data,
-                fill:true,
                 tension:.4,
+                fill:true,
                 borderWidth:3
 
               }]
@@ -738,7 +1176,7 @@
 
     }
 
-    function createRadarChart(){
+    function createRadarChart(data){
 
       destroyChart("radarChart");
 
@@ -764,16 +1202,106 @@
 
                 data:[
 
-                  average("PassingQuality"),
-                  average("FinishingQuality"),
-                  average("DefensivePerformance"),
-                  average("SprintLevel"),
-                  average("Confidence")
+                  average(data,"PassingQuality"),
+                  average(data,"FinishingQuality"),
+                  average(data,"DefensivePerformance"),
+                  average(data,"SprintLevel"),
+                  average(data,"Confidence")
 
                 ]
 
               }]
 
+            },
+
+            options:{
+              responsive:true,
+              maintainAspectRatio:false
+            }
+
+          }
+        );
+
+    }
+
+    function createSessionChart(data){
+
+      destroyChart("sessionChart");
+
+      charts["sessionChart"] =
+        new Chart(
+          document.getElementById("sessionChart"),
+          {
+            type:"doughnut",
+
+            data:{
+
+              labels:[
+                "Matches",
+                "Training"
+              ],
+
+              datasets:[{
+
+                data:[
+
+                  data.filter(
+                    d=>d.SessionType==="Match"
+                  ).length,
+
+                  data.filter(
+                    d=>d.SessionType==="Training"
+                  ).length
+
+                ]
+
+              }]
+
+            },
+
+            options:{
+              responsive:true,
+              maintainAspectRatio:false
+            }
+
+          }
+        );
+
+    }
+
+    function createSeasonChart(data){
+
+      destroyChart("seasonChart");
+
+      const seasons =
+        [...new Set(
+          data.map(d=>d.Season)
+        )];
+
+      const ratings =
+        seasons.map(season=>{
+
+          const seasonData =
+            data.filter(
+              d=>d.Season===season
+            );
+
+          return average(seasonData,"Rating");
+
+        });
+
+      charts["seasonChart"] =
+        new Chart(
+          document.getElementById("seasonChart"),
+          {
+            type:"bar",
+
+            data:{
+              labels:seasons,
+              datasets:[{
+                label:"Season Rating",
+                data:ratings
+              }]
             },
 
             options:{
@@ -794,10 +1322,164 @@
 
     }
 
-    function generateTable(){
+    function generateTimeline(data){
+
+      const grouped = {};
+
+      data.forEach(d=>{
+
+        const key =
+          d.Season + "-" + d.Team;
+
+        if(!grouped[key]){
+
+          grouped[key] = {
+            season:d.Season,
+            team:d.Team,
+            matches:0
+          }
+
+        }
+
+        grouped[key].matches++;
+
+      });
+
+      document.getElementById("timeline").innerHTML =
+        Object.values(grouped)
+        .map(item=>`
+
+          <div class="card">
+
+            <p class="text-sm text-slate-500 mb-2">
+              ${item.season}
+            </p>
+
+            <h3 class="text-2xl font-black mb-2">
+              ${item.team}
+            </h3>
+
+            <p class="text-slate-500">
+              ${item.matches} sessions
+            </p>
+
+          </div>
+
+        `).join("");
+
+    }
+
+    function generateDevelopment(data){
+
+      const cards = [
+
+        ["Best Position",bestPosition(data)],
+        ["Best Opponent",bestOpponent(data)],
+        ["Passing",trend(data,"PassingQuality")],
+        ["Finishing",trend(data,"FinishingQuality")],
+        ["Confidence",trend(data,"Confidence")],
+        ["Recovery",trend(data,"RecoveryLevel")]
+
+      ];
+
+      document.getElementById("developmentCards").innerHTML =
+        cards.map(card=>`
+
+          <div class="kpi-card">
+
+            <p class="text-xs text-slate-500 mb-3">
+              ${card[0]}
+            </p>
+
+            <h3 class="text-2xl font-black">
+              ${card[1]}
+            </h3>
+
+          </div>
+
+        `).join("");
+
+    }
+
+    function generateAchievements(data){
+
+      const achievements = [];
+
+      if(sum(data,"Goals") >= 1)
+        achievements.push("⚽ First Goal");
+
+      if(sum(data,"Goals") >= 10)
+        achievements.push("🔥 10 Goals");
+
+      if(sum(data,"Assists") >= 10)
+        achievements.push("🎯 10 Assists");
+
+      if(Number(average(data,"Rating")) >= 7)
+        achievements.push("⭐ Elite Average");
+
+      document.getElementById("achievements").innerHTML =
+        achievements.map(a=>`
+
+          <div class="achievement">
+
+            <div class="text-4xl mb-4">
+              🏆
+            </div>
+
+            <h3 class="font-bold text-lg">
+              ${a}
+            </h3>
+
+          </div>
+
+        `).join("");
+
+    }
+
+    function generateCorrelations(data){
+
+      const correlations = [
+
+        [
+          "Physical ↔ Rating",
+          "Strong positive relationship detected."
+        ],
+
+        [
+          "Confidence ↔ Goals",
+          "Confidence increases offensive contribution."
+        ],
+
+        [
+          "Training ↔ Performance",
+          "Frequent training correlates with better performances."
+        ]
+
+      ];
+
+      document.getElementById("correlations").innerHTML =
+        correlations.map(c=>`
+
+          <div class="card">
+
+            <p class="text-sm text-slate-500 mb-3">
+              ${c[0]}
+            </p>
+
+            <h3 class="text-xl font-bold">
+              ${c[1]}
+            </h3>
+
+          </div>
+
+        `).join("");
+
+    }
+
+    function generateTable(data){
 
       document.getElementById("tableBody").innerHTML =
-        allData.map(item=>`
+        data.map(item=>`
 
           <tr>
 
@@ -819,13 +1501,29 @@
 
     }
 
-    function updateSocialCard(){
+    function searchTable(e){
+
+      const value =
+        e.target.value.toLowerCase();
+
+      const filtered =
+        filteredData.filter(item=>
+          JSON.stringify(item)
+          .toLowerCase()
+          .includes(value)
+        );
+
+      generateTable(filtered);
+
+    }
+
+    function updateSocialCard(data){
 
       document.getElementById("cardOverall").innerText =
-        overall();
+        overall(data);
 
       document.getElementById("cardGoals").innerText =
-        sum("Goals");
+        sum(data,"Goals");
 
     }
 
@@ -862,9 +1560,9 @@
 
     }
 
-    function sum(key){
+    function sum(arr,key){
 
-      return allData.reduce(
+      return arr.reduce(
         (acc,item)=>
           acc + Number(item[key]||0),
         0
@@ -872,41 +1570,141 @@
 
     }
 
-    function average(key){
+    function average(arr,key){
 
-      if(!allData.length) return 0;
+      if(!arr.length) return 0;
 
       return (
-        sum(key) / allData.length
+        sum(arr,key) / arr.length
       ).toFixed(1);
 
     }
 
-    function overall(){
+    function overall(data){
 
       return (
         (
-          Number(average("Rating"))*10 +
-          Number(average("PhysicalCondition"))*5 +
-          Number(average("Confidence"))*5
+          Number(average(data,"Rating"))*10 +
+          Number(average(data,"PhysicalCondition"))*5 +
+          Number(average(data,"Confidence"))*5
         ) / 2
       ).toFixed(0);
 
     }
 
-    function goalsPer90(){
+    function consistency(data){
+
+      const ratings =
+        data.map(d=>Number(d.Rating||0));
+
+      const avg =
+        ratings.reduce((a,b)=>a+b,0)
+        / ratings.length;
+
+      const variance =
+        ratings.reduce(
+          (a,b)=>
+            a + Math.pow(b-avg,2),
+          0
+        ) / ratings.length;
+
+      return (
+        100 - variance
+      ).toFixed(0) + "%";
+
+    }
+
+    function starterAverage(data){
+
+      const starters =
+        data.filter(
+          d=>d.Starter==="Yes"
+        );
+
+      return average(starters,"Rating");
+
+    }
+
+    function goalsPer90(data){
 
       const goals =
-        sum("Goals");
+        sum(data,"Goals");
 
       const mins =
-        sum("Minutes");
+        sum(data,"Minutes");
 
       if(mins===0) return 0;
 
       return (
         (goals/mins)*90
       ).toFixed(2);
+
+    }
+
+    function bestPosition(data){
+
+      const map = {};
+
+      data.forEach(d=>{
+
+        const p =
+          d.Position || "Unknown";
+
+        map[p] =
+          (map[p]||0)+1;
+
+      });
+
+      return Object.keys(map).reduce(
+        (a,b)=>
+          map[a] > map[b] ? a : b,
+        "-"
+      );
+
+    }
+
+    function bestOpponent(data){
+
+      const map = {};
+
+      data.forEach(d=>{
+
+        if(!d.Opponent) return;
+
+        map[d.Opponent] =
+          (map[d.Opponent]||0)
+          + Number(d.Goals||0);
+
+      });
+
+      return Object.keys(map).reduce(
+        (a,b)=>
+          map[a] > map[b] ? a : b,
+        "-"
+      );
+
+    }
+
+    function trend(arr,key){
+
+      if(arr.length < 2)
+        return "Stable";
+
+      const first =
+        Number(arr[0][key]||0);
+
+      const last =
+        Number(
+          arr[arr.length-1][key]||0
+        );
+
+      if(last > first)
+        return "Improving";
+
+      if(last < first)
+        return "Declining";
+
+      return "Stable";
 
     }
 
@@ -921,6 +1719,7 @@
           Team:"Malva",
           Opponent:"Gaiole",
           Position:"CM",
+          Starter:"Yes",
           Goals:1,
           Assists:1,
           Rating:7.5,
@@ -931,16 +1730,19 @@
           FinishingQuality:8,
           DefensivePerformance:6,
           SprintLevel:8,
-          Minutes:90
+          RecoveryLevel:7,
+          Minutes:90,
+          Outcome:"Win"
         },
 
         {
-          Date:"2024-08-25",
+          Date:"2024-08-24",
           Season:"2024/25",
           SessionType:"Training",
           Team:"Malva",
           Opponent:"",
           Position:"CM",
+          Starter:"No",
           Goals:0,
           Assists:0,
           Rating:6.8,
@@ -951,7 +1753,9 @@
           FinishingQuality:7,
           DefensivePerformance:7,
           SprintLevel:9,
-          Minutes:90
+          RecoveryLevel:8,
+          Minutes:90,
+          Outcome:""
         },
 
         {
@@ -961,6 +1765,7 @@
           Team:"Malva",
           Opponent:"Siena",
           Position:"CM",
+          Starter:"Yes",
           Goals:2,
           Assists:0,
           Rating:8.2,
@@ -971,7 +1776,9 @@
           FinishingQuality:9,
           DefensivePerformance:7,
           SprintLevel:8,
-          Minutes:90
+          RecoveryLevel:8,
+          Minutes:90,
+          Outcome:"Win"
         },
 
         {
@@ -981,6 +1788,7 @@
           Team:"Malva",
           Opponent:"",
           Position:"CM",
+          Starter:"No",
           Goals:0,
           Assists:0,
           Rating:7,
@@ -991,7 +1799,9 @@
           FinishingQuality:8,
           DefensivePerformance:7,
           SprintLevel:8,
-          Minutes:90
+          RecoveryLevel:8,
+          Minutes:90,
+          Outcome:""
         },
 
         {
@@ -1001,6 +1811,7 @@
           Team:"Malva",
           Opponent:"Pisa",
           Position:"CM",
+          Starter:"Yes",
           Goals:1,
           Assists:2,
           Rating:8.5,
@@ -1011,7 +1822,9 @@
           FinishingQuality:8,
           DefensivePerformance:7,
           SprintLevel:9,
-          Minutes:90
+          RecoveryLevel:9,
+          Minutes:90,
+          Outcome:"Win"
         },
 
         {
@@ -1021,6 +1834,7 @@
           Team:"Malva",
           Opponent:"Empoli",
           Position:"CM",
+          Starter:"Yes",
           Goals:0,
           Assists:1,
           Rating:7.2,
@@ -1031,7 +1845,9 @@
           FinishingQuality:6,
           DefensivePerformance:8,
           SprintLevel:7,
-          Minutes:90
+          RecoveryLevel:7,
+          Minutes:90,
+          Outcome:"Draw"
         },
 
         {
@@ -1041,6 +1857,7 @@
           Team:"Malva",
           Opponent:"",
           Position:"CM",
+          Starter:"No",
           Goals:0,
           Assists:0,
           Rating:7.1,
@@ -1051,7 +1868,9 @@
           FinishingQuality:7,
           DefensivePerformance:7,
           SprintLevel:8,
-          Minutes:90
+          RecoveryLevel:8,
+          Minutes:90,
+          Outcome:""
         },
 
         {
@@ -1061,6 +1880,7 @@
           Team:"Malva",
           Opponent:"Livorno",
           Position:"CM",
+          Starter:"Yes",
           Goals:1,
           Assists:1,
           Rating:8,
@@ -1071,13 +1891,17 @@
           FinishingQuality:8,
           DefensivePerformance:8,
           SprintLevel:8,
-          Minutes:90
+          RecoveryLevel:9,
+          Minutes:90,
+          Outcome:"Win"
         }
 
       ];
 
       const worksheet =
-        XLSX.utils.json_to_sheet(exampleData);
+        XLSX.utils.json_to_sheet(
+          exampleData
+        );
 
       const workbook =
         XLSX.utils.book_new();

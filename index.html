@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Football Career Analytics</title>
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- SheetJS -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body {
+background: #f4f7fb;
+font-family: Arial, sans-serif;
+color: #1e293b;
+}
+
+.card {
+background: white;
+border-radius: 24px;
+padding: 24px;
+box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+border: 1px solid #e2e8f0;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+}
+
+th {
+text-align: left;
+padding: 14px;
+background: #f8fafc;
+color: #475569;
+font-size: 14px;
+}
+
+td {
+padding: 14px;
+border-top: 1px solid #e2e8f0;
+font-size: 14px;
+}
+
+tr:hover {
+background: #f8fafc;
+}
+
+</style>
+
+</head>
+
+<body class="p-6">
+
+<div class="max-w-7xl mx-auto">
+
+<!-- HERO -->
+
+<div class="mb-10">
+
+<h1 class="text-5xl font-bold mb-4 text-slate-800">
+Football Career Analytics
+</h1>
+
+<p class="text-slate-500 text-xl max-w-3xl">
+Turn your football career into professional analytics.
+Upload your Excel file and instantly visualize your statistics,
+performances and career journey.
+</p>
+
+</div>
+
+<!-- UPLOAD -->
+
+<div class="card mb-8">
+
+<h2 class="text-2xl font-semibold mb-6">
+Upload Career File
+</h2>
+
+<input
+type="file"
+id="excelFile"
+accept=".xlsx,.xls,.csv"
+class="block w-full border border-slate-300 rounded-xl p-4"
+/>
+
+<div class="mt-6 flex flex-col md:flex-row gap-4">
+
+<button
+onclick="downloadTemplate()"
+class="bg-slate-800 text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition"
+>
+Download Example Template
+</button>
+
+<div class="text-slate-500 flex items-center">
+Required columns:
+Date, Team, Opponent, Goals, Assists,
+Rating, Minutes, Outcome, Starter,
+PhysicalCondition, YellowCards, RedCards
+</div>
+
+</div>
+
+</div>
+
+<!-- OVERVIEW -->
+
+<div
+id="overview"
+class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-10"
+></div>
+
+<!-- CHARTS -->
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+
+<div class="card">
+
+<h2 class="text-2xl font-semibold mb-5">
+Goals Over Time
+</h2>
+
+<canvas id="goalsChart"></canvas>
+
+</div>
+
+<div class="card">
+
+<h2 class="text-2xl font-semibold mb-5">
+Rating Trend
+</h2>
+
+<canvas id="ratingChart"></canvas>
+
+</div>
+
+<div class="card lg:col-span-2">
+
+<h2 class="text-2xl font-semibold mb-5">
+Physical Condition Trend
+</h2>
+
+<canvas id="physicalChart"></canvas>
+
+</div>
+
+</div>
+
+<!-- INSIGHTS -->
+
+<div class="card mb-10">
+
+<h2 class="text-2xl font-semibold mb-6">
+Career Insights
+</h2>
+
+<div
+id="insights"
+class="grid grid-cols-1 md:grid-cols-2 gap-4"
+></div>
+
+</div>
+
+<!-- MATCH HISTORY -->
+
+<div class="card">
+
+<div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
+
+<h2 class="text-2xl font-semibold">
+Match History
+</h2>
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search matches..."
+class="border border-slate-300 rounded-xl px-4 py-3 w-full md:w-80"
+/>
+
+</div>
+
+<div class="overflow-auto">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Date</th>
+<th>Team</th>
+<th>Opponent</th>
+<th>Goals</th>
+<th>Assists</th>
+<th>Rating</th>
+<th>Minutes</th>
+<th>Starter</th>
+<th>Physical</th>
+<th>YC</th>
+<th>RC</th>
+<th>Outcome</th>
+</tr>
+
+</thead>
+
+<tbody id="tableBody"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let allMatches = [];
+
+let goalsChartInstance;
+let ratingChartInstance;
+let physicalChartInstance;
+
+document
+.getElementById("excelFile")
+.addEventListener("change", handleFile);
+
+function handleFile(e) {
+
+const file = e.target.files[0];
+
+if (!file) return;
+
+const reader = new FileReader();
+
+reader.onload = function(event) {
+
+const data = new Uint8Array(event.target.result);
+
+const workbook = XLSX.read(data, {
+type: "array"
+});
+
+const sheet =
+workbook.Sheets[workbook.SheetNames[0]];
+
+const json =
+XLSX.utils.sheet_to_json(sheet);
+
+allMatches = json;
+
+generateDashboard(json);
+
+};
+
+reader.readAsArrayBuffer(file);
+
+}
+
+function generateDashboard(matches) {
+
+generateOverview(matches);
+
+generateTable(matches);
+
+generateInsights(matches);
+
+generateCharts(matches);
+
+}
+
+function generateOverview(matches) {
+
+const totalMatches = matches.length;
+
+const totalGoals = sum(matches, "Goals");
+
+const totalAssists = sum(matches, "Assists");
+
+const totalMinutes = sum(matches, "Minutes");
+
+const avgRating = average(matches, "Rating");
+
+const avgPhysical =
+average(matches, "PhysicalCondition");
+
+const yellowCards =
+sum(matches, "YellowCards");
+
+const redCards =
+sum(matches, "RedCards");
+
+const starterMatches = matches.filter(
+m =>
+String(m.Starter).toLowerCase() === "yes"
+).length;
+
+const wins = matches.filter(
+m =>
+String(m.Outcome).toLowerCase() === "win"
+).length;
+
+const winRate =
+totalMatches > 0
+? ((wins / totalMatches) * 100).toFixed(1)
+: 0;
+
+const cards = [
+
+{
+title: "Matches",
+value: totalMatches
+},
+
+{
+title: "Goals",
+value: totalGoals
+},
+
+{
+title: "Assists",
+value: totalAssists
+},
+
+{
+title: "Avg Rating",
+value: avgRating
+},
+
+{
+title: "Minutes",
+value: totalMinutes
+},
+
+{
+title: "Avg Physical",
+value: avgPhysical
+},
+
+{
+title: "Starter Matches",
+value: starterMatches
+},
+
+{
+title: "Wins",
+value: wins
+},
+
+{
+title: "Win Rate",
+value: winRate + "%"
+},
+
+{
+title: "Yellow Cards",
+value: yellowCards
+},
+
+{
+title: "Red Cards",
+value: redCards
+}
+
+];
+
+document.getElementById("overview").innerHTML =
+cards.map(card => `
+
+<div class="card">
+
+<p class="text-slate-500 mb-3 text-sm uppercase tracking-wide">
+${card.title}
+</p>
+
+<h3 class="text-5xl font-bold text-slate-800">
+${card.value}
+</h3>
+
+</div>
+
+`).join("");
+
+}
+
+function generateTable(matches) {
+
+const tbody =
+document.getElementById("tableBody");
+
+tbody.innerHTML = matches.map(match => `
+
+<tr>
+
+<td>${match.Date || ""}</td>
+
+<td>${match.Team || ""}</td>
+
+<td>${match.Opponent || ""}</td>
+
+<td>${match.Goals || 0}</td>
+
+<td>${match.Assists || 0}</td>
+
+<td>${match.Rating || "-"}</td>
+
+<td>${match.Minutes || 0}</td>
+
+<td>${match.Starter || ""}</td>
+
+<td>${match.PhysicalCondition || ""}</td>
+
+<td>${match.YellowCards || 0}</td>
+
+<td>${match.RedCards || 0}</td>
+
+<td>${match.Outcome || ""}</td>
+
+</tr>
+
+`).join("");
+
+}
+
+function generateInsights(matches) {
+
+if (!matches.length) return;
+
+const bestGame = matches.reduce((a, b) =>
+Number(a.Rating || 0) >
+Number(b.Rating || 0)
+? a
+: b
+);
+
+const goals =
+sum(matches, "Goals");
+
+const assists =
+sum(matches, "Assists");
+
+const avgPhysical =
+average(matches, "PhysicalCondition");
+
+const starterGames = matches.filter(
+m =>
+String(m.Starter).toLowerCase() === "yes"
+).length;
+
+const insights = [
+
+`⚽ Total goal contributions: ${goals + assists}`,
+
+`🔥 Highest rating: ${bestGame.Rating}`,
+
+`🏆 Best match: ${bestGame.Team} vs ${bestGame.Opponent}`,
+
+`🎯 Goals scored: ${goals}`,
+
+`🅰️ Assists made: ${assists}`,
+
+`💪 Average physical condition: ${avgPhysical}`,
+
+`📋 Matches as starter: ${starterGames}`
+
+];
+
+document.getElementById("insights").innerHTML =
+insights.map(insight => `
+
+<div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
+
+${insight}
+
+</div>
+
+`).join("");
+
+}
+
+function generateCharts(matches) {
+
+const labels =
+matches.map(m => m.Date);
+
+const goalsData =
+matches.map(m =>
+Number(m.Goals || 0)
+);
+
+const ratingData =
+matches.map(m =>
+Number(m.Rating || 0)
+);
+
+const physicalData =
+matches.map(m =>
+Number(m.PhysicalCondition || 0)
+);
+
+if (goalsChartInstance)
+goalsChartInstance.destroy();
+
+if (ratingChartInstance)
+ratingChartInstance.destroy();
+
+if (physicalChartInstance)
+physicalChartInstance.destroy();
+
+goalsChartInstance = new Chart(
+
+document.getElementById("goalsChart"),
+
+{
+type: "line",
+
+data: {
+
+labels: labels,
+
+datasets: [
+
+{
+label: "Goals",
+data: goalsData,
+borderWidth: 3,
+tension: 0.4
+}
+
+]
+
+}
+
+}
+
+);
+
+ratingChartInstance = new Chart(
+
+document.getElementById("ratingChart"),
+
+{
+type: "line",
+
+data: {
+
+labels: labels,
+
+datasets: [
+
+{
+label: "Rating",
+data: ratingData,
+borderWidth: 3,
+tension: 0.4
+}
+
+]
+
+}
+
+}
+
+);
+
+physicalChartInstance = new Chart(
+
+document.getElementById("physicalChart"),
+
+{
+type: "line",
+
+data: {
+
+labels: labels,
+
+datasets: [
+
+{
+label: "Physical Condition",
+data: physicalData,
+borderWidth: 3,
+tension: 0.4
+}
+
+]
+
+}
+
+}
+
+);
+
+}
+
+function sum(arr, key) {
+
+return arr.reduce(
+(acc, item) =>
+acc + Number(item[key] || 0),
+0
+);
+
+}
+
+function average(arr, key) {
+
+if (!arr.length) return 0;
+
+return (
+sum(arr, key) / arr.length
+).toFixed(2);
+
+}
+
+document
+.getElementById("searchInput")
+.addEventListener("input", function(e) {
+
+const value =
+e.target.value.toLowerCase();
+
+const filtered = allMatches.filter(match =>
+JSON.stringify(match)
+.toLowerCase()
+.includes(value)
+);
+
+generateTable(filtered);
+
+});
+
+function downloadTemplate() {
+
+const exampleData = [
+
+{
+Date: "2025-01-12",
+Team: "Malva",
+Opponent: "Gaiole",
+Goals: 1,
+Assists: 1,
+Rating: 7.5,
+Minutes: 90,
+Outcome: "Win",
+Starter: "Yes",
+PhysicalCondition: 8,
+YellowCards: 1,
+RedCards: 0
+},
+
+{
+Date: "2025-01-19",
+Team: "Malva",
+Opponent: "Valdarno",
+Goals: 0,
+Assists: 2,
+Rating: 7.0,
+Minutes: 85,
+Outcome: "Draw",
+Starter: "No",
+PhysicalCondition: 6,
+YellowCards: 0,
+RedCards: 0
+}
+
+];
+
+const worksheet =
+XLSX.utils.json_to_sheet(exampleData);
+
+const workbook =
+XLSX.utils.book_new();
+
+XLSX.utils.book_append_sheet(
+workbook,
+worksheet,
+"CareerData"
+);
+
+XLSX.writeFile(
+workbook,
+"football-career-template.xlsx"
+);
+
+}
+
+</script>
+
+</body>
+
+</html>

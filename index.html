@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PlayerLab Ultimate</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <!-- Tailwind rimosso: classi utility usate aggiunte nel CSS sotto -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -26,208 +25,78 @@
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body {
-      background: var(--bg);
-      font-family: var(--font-body);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+    body { background: var(--bg); font-family: var(--font-body); color: var(--text); min-height: 100vh; overflow-x: hidden; }
     body::before {
       content: '';
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background:
-        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(59,130,246,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 80% 110%, rgba(6,214,160,0.08) 0%, transparent 60%);
-      pointer-events: none;
-      z-index: 0;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse 80% 50% at 20% -10%, rgba(59,130,246,0.12) 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 40% at 80% 110%, rgba(6,214,160,0.08) 0%, transparent 60%);
+      pointer-events: none; z-index: 0;
     }
     .wrap { max-width: 1400px; margin: 0 auto; padding: 24px; position: relative; z-index: 1; }
 
     /* HERO */
-    .hero {
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      padding: 48px;
-      margin-bottom: 24px;
-      background: linear-gradient(135deg, rgba(15,21,32,0.95), rgba(21,29,46,0.95));
-      backdrop-filter: blur(20px);
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '⚽';
-      position: absolute;
-      right: -40px; top: -60px;
-      font-size: 240px;
-      opacity: 0.03;
-      pointer-events: none;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(59,130,246,0.15);
-      border: 1px solid rgba(59,130,246,0.3);
-      color: var(--accent);
-      padding: 6px 16px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      margin-bottom: 20px;
-    }
-    h1.title {
-      font-family: var(--font-display);
-      font-size: clamp(52px, 8vw, 96px);
-      line-height: 0.9;
-      letter-spacing: 0.02em;
-      background: linear-gradient(135deg, #fff 40%, rgba(59,130,246,0.8));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 16px;
-    }
+    .hero { border: 1px solid var(--border); border-radius: 28px; padding: 48px; margin-bottom: 24px; background: linear-gradient(135deg, rgba(15,21,32,0.95), rgba(21,29,46,0.95)); backdrop-filter: blur(20px); position: relative; overflow: hidden; }
+    .hero::before { content: '⚽'; position: absolute; right: -40px; top: -60px; font-size: 240px; opacity: 0.03; pointer-events: none; }
+    .badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3); color: var(--accent); padding: 6px 16px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; margin-bottom: 20px; }
+    h1.title { font-family: var(--font-display); font-size: clamp(52px, 8vw, 96px); line-height: 0.9; letter-spacing: 0.02em; background: linear-gradient(135deg, #fff 40%, rgba(59,130,246,0.8)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 16px; }
     .hero p { color: var(--muted); font-size: 15px; line-height: 1.7; max-width: 520px; }
-
-    /* FILE INPUT */
-    .file-zone {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 32px;
-      align-items: center;
-    }
-    .file-input-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--surface2);
-      border: 1px dashed rgba(59,130,246,0.4);
-      border-radius: 16px;
-      padding: 14px 22px;
-      font-size: 14px;
-      color: var(--muted);
-      cursor: pointer;
-      transition: 0.2s;
-    }
+    .file-zone { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; align-items: center; }
+    .file-input-label { display: flex; align-items: center; gap: 10px; background: var(--surface2); border: 1px dashed rgba(59,130,246,0.4); border-radius: 16px; padding: 14px 22px; font-size: 14px; color: var(--muted); cursor: pointer; transition: 0.2s; }
     .file-input-label:hover { border-color: var(--accent); color: var(--text); }
     #excelFile { display: none; }
-    .btn {
-      background: var(--accent);
-      color: white;
-      border: none;
-      padding: 14px 28px;
-      border-radius: 14px;
-      font-family: var(--font-body);
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+    .btn { background: var(--accent); color: white; border: none; padding: 14px 28px; border-radius: 14px; font-family: var(--font-body); font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; }
     .btn:hover { background: #2563eb; transform: translateY(-1px); }
-    .btn.secondary {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
+    .btn.secondary { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
     .btn.secondary:hover { background: var(--surface); }
 
     /* EMPTY */
-    #emptyState {
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      padding: 80px 40px;
-      text-align: center;
-      background: var(--surface);
-    }
+    #emptyState { border: 1px solid var(--border); border-radius: 28px; padding: 80px 40px; text-align: center; background: var(--surface); }
     #emptyState h2 { font-family: var(--font-display); font-size: 52px; letter-spacing: 0.03em; margin: 20px 0 12px; }
     #emptyState p { color: var(--muted); max-width: 480px; margin: 0 auto 32px; line-height: 1.7; }
 
+    /* LEGENDA CAMPI */
+    .legend-box { background: var(--surface2); border: 1px solid rgba(59,130,246,0.2); border-radius: 20px; padding: 24px; margin-bottom: 20px; }
+    .legend-box h3 { font-family: var(--font-display); font-size: 22px; letter-spacing: 0.04em; margin-bottom: 14px; color: var(--accent); }
+    .legend-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+    .legend-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; }
+    .legend-item .l-field { font-size: 11px; font-weight: 700; color: var(--accent2); letter-spacing: 0.06em; margin-bottom: 4px; }
+    .legend-item .l-type { font-size: 10px; color: var(--accent3); margin-bottom: 4px; font-weight: 600; }
+    .legend-item .l-vals { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
     /* CARD */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 28px;
-      transition: 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 28px; transition: 0.25s; position: relative; overflow: hidden; }
     .card:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-2px); }
 
     /* FILTERS */
-    .filter-bar {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 10px;
-    }
-    select, input[type=date], input[type=text] {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px 14px;
-      color: var(--text);
-      font-family: var(--font-body);
-      font-size: 13px;
-      outline: none;
-      transition: 0.2s;
-      width: 100%;
-    }
+    .filter-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+    select, input[type=date], input[type=text] { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; color: var(--text); font-family: var(--font-body); font-size: 13px; outline: none; transition: 0.2s; width: 100%; }
     select:focus, input:focus { border-color: var(--accent); }
     select option { background: var(--surface2); }
 
     /* KPI */
     .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
-    .kpi {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 22px 18px;
-      position: relative;
-      overflow: hidden;
-      transition: 0.2s;
-    }
+    .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 22px 18px; position: relative; overflow: hidden; transition: 0.2s; }
     .kpi:hover { border-color: rgba(59,130,246,0.3); }
-    .kpi::after {
-      content: '';
-      position: absolute;
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      top: -30px; right: -20px;
-    }
-    .kpi.blue::after { background: rgba(59,130,246,0.12); }
+    .kpi::after { content: ''; position: absolute; width: 80px; height: 80px; border-radius: 50%; top: -30px; right: -20px; }
+    .kpi.blue::after  { background: rgba(59,130,246,0.12); }
     .kpi.green::after { background: rgba(6,214,160,0.12); }
     .kpi.amber::after { background: rgba(245,158,11,0.12); }
-    .kpi.red::after { background: rgba(239,68,68,0.12); }
+    .kpi.red::after   { background: rgba(239,68,68,0.12); }
     .kpi label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); display: block; margin-bottom: 10px; font-weight: 600; }
     .kpi .val { font-family: var(--font-display); font-size: 42px; letter-spacing: 0.02em; line-height: 1; }
-    .kpi.blue .val { color: var(--accent); }
+    .kpi.blue .val  { color: var(--accent); }
     .kpi.green .val { color: var(--accent2); }
     .kpi.amber .val { color: var(--accent3); }
-    .kpi.red .val { color: var(--accent4); }
-    .kpi .delta { font-size: 11px; color: var(--muted); margin-top: 6px; }
+    .kpi.red .val   { color: var(--accent4); }
 
-    /* PATTERN CARDS */
-    .pattern-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 22px;
-    }
-    .pattern-card .pattern-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
-    .pattern-card .pattern-value { font-size: 15px; font-weight: 600; line-height: 1.5; }
-    .pattern-card .pattern-score {
-      display: inline-block;
-      margin-top: 8px;
-      font-size: 11px;
-      padding: 3px 10px;
-      border-radius: 999px;
-      font-weight: 700;
-    }
+    /* PATTERN */
+    .pattern-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 22px; }
+    .pattern-card .pattern-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 600; margin-bottom: 10px; }
+    .pattern-card .pattern-value { font-size: 14px; font-weight: 500; line-height: 1.6; color: var(--text); }
+    .pattern-score { display: inline-block; margin-top: 8px; font-size: 11px; padding: 3px 10px; border-radius: 999px; font-weight: 700; }
     .score-positive { background: rgba(6,214,160,0.15); color: var(--accent2); }
-    .score-warning { background: rgba(245,158,11,0.15); color: var(--accent3); }
+    .score-warning  { background: rgba(245,158,11,0.15); color: var(--accent3); }
     .score-negative { background: rgba(239,68,68,0.15); color: var(--accent4); }
 
     /* CHARTS */
@@ -235,29 +104,18 @@
     .section-title { font-family: var(--font-display); font-size: 28px; letter-spacing: 0.04em; margin-bottom: 4px; }
     .section-sub { font-size: 13px; color: var(--muted); }
     .chart-info { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .section-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
 
-    /* CORRELATION */
-    .corr-item {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
-    }
+    /* CORR */
+    .corr-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
     .corr-label { font-size: 11px; color: var(--muted); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
     .corr-bar-track { background: rgba(255,255,255,0.06); border-radius: 999px; height: 6px; margin: 10px 0; }
     .corr-bar { height: 6px; border-radius: 999px; transition: width 0.8s cubic-bezier(.4,0,.2,1); }
     .corr-val { font-family: var(--font-display); font-size: 26px; }
     .corr-desc { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
 
-    /* ACHIEVEMENTS */
-    .ach {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 20px;
-      text-align: center;
-      transition: 0.2s;
-    }
+    /* ACH */
+    .ach { background: var(--surface2); border: 1px solid var(--border); border-radius: 18px; padding: 20px; text-align: center; transition: 0.2s; }
     .ach:hover { border-color: rgba(245,158,11,0.4); transform: translateY(-2px); }
     .ach .icon { font-size: 36px; margin-bottom: 10px; }
     .ach .ach-name { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
@@ -265,92 +123,36 @@
 
     /* OPPONENT TABLE */
     .opp-table { width: 100%; border-collapse: collapse; }
-    .opp-table th { background: var(--surface2); color: var(--muted); padding: 10px 14px; font-size: 11px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
-    .opp-table td { padding: 12px 14px; border-top: 1px solid var(--border); font-size: 13px; }
+    .opp-table th { background: var(--surface2); color: var(--muted); padding: 10px 14px; font-size: 11px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+    .opp-table td { padding: 12px 14px; border-top: 1px solid var(--border); font-size: 13px; white-space: nowrap; }
     .opp-table tr:hover td { background: var(--surface2); }
+
+    /* RESULT BADGES */
     .result-badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
     .result-w { background: rgba(6,214,160,0.15); color: var(--accent2); }
     .result-d { background: rgba(245,158,11,0.15); color: var(--accent3); }
     .result-l { background: rgba(239,68,68,0.15); color: var(--accent4); }
 
-    /* SESSION TABLE */
+    /* HOME/AWAY BADGES */
+    .venue-home { background: rgba(59,130,246,0.15); color: var(--accent); display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; }
+    .venue-away { background: rgba(245,158,11,0.15); color: var(--accent3); display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; }
+
+    /* DATA TABLE */
     .data-table { width: 100%; border-collapse: collapse; }
     .data-table th { background: var(--surface2); color: var(--muted); padding: 12px; font-size: 11px; text-align: left; white-space: nowrap; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
     .data-table td { padding: 12px; border-top: 1px solid var(--border); font-size: 13px; white-space: nowrap; }
     .data-table tr:hover td { background: var(--surface2); }
 
     /* SOCIAL CARD */
-    .social-card {
-      width: 1200px; height: 630px;
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
-      border-radius: 32px;
-      color: white;
-      padding: 60px 70px;
-      overflow: hidden;
-      position: relative;
-      flex-shrink: 0;
-    }
-    .social-card::before {
-      content: '';
-      position: absolute;
-      width: 500px; height: 500px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(59,130,246,0.2), transparent 70%);
-      top: -200px; right: -100px;
-    }
+    .social-card { width: 1200px; height: 630px; background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%); border-radius: 32px; color: white; padding: 60px 70px; overflow: hidden; position: relative; flex-shrink: 0; }
+    .social-card::before { content: ''; position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(59,130,246,0.2), transparent 70%); top: -200px; right: -100px; }
 
     /* TIMELINE */
-    .timeline-club {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 20px;
-      transition: 0.2s;
-    }
+    .timeline-club { background: var(--surface2); border: 1px solid var(--border); border-radius: 18px; padding: 20px; transition: 0.2s; }
     .timeline-club:hover { border-color: rgba(59,130,246,0.3); }
 
-    /* GRID HELPERS */
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 16px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-    .mb { margin-bottom: 20px; }
-
-    /* FADE IN */
-    .fade { animation: fadeUp 0.5s ease both; }
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(16px); }
-      to { opacity:1; transform:translateY(0); }
-    }
-
-    /* SCROLLBAR */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 999px; }
-
-    /* SECTION HEADER */
-    .section-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
-
-    /* INSIGHT BOX */
-    .insight {
-      background: rgba(59,130,246,0.08);
-      border: 1px solid rgba(59,130,246,0.2);
-      border-radius: 14px;
-      padding: 14px 18px;
-      font-size: 13px;
-      color: #93c5fd;
-      line-height: 1.6;
-      margin-top: 14px;
-    }
-    .insight strong { color: var(--accent); }
-
     /* DEV CARD */
-    .dev-card {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 20px;
-      transition: 0.2s;
-    }
+    .dev-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 18px; padding: 20px; transition: 0.2s; }
     .dev-card:hover { border-color: rgba(255,255,255,0.15); }
     .dev-card .dev-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
     .dev-card .dev-val { font-family: var(--font-display); font-size: 30px; margin-bottom: 4px; }
@@ -358,16 +160,26 @@
     .trend-down { color: var(--accent4); }
     .trend-stable { color: var(--accent3); }
 
-    /* CAREER HISTORY CHART full width */
-    .full-width { grid-column: 1 / -1; }
+    /* INSIGHT */
+    .insight { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: 14px; padding: 14px 18px; font-size: 13px; color: #93c5fd; line-height: 1.6; margin-top: 14px; }
+    .insight strong { color: var(--accent); }
 
-    /* Progress bar for opponent strength */
-    .mini-bar-track { background: rgba(255,255,255,0.06); border-radius: 3px; height: 4px; margin-top: 4px; }
-    .mini-bar { height: 4px; border-radius: 3px; }
+    /* GRIDS */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .mb { margin-bottom: 20px; }
 
-    input[type=text].search { width: 260px; }
+    /* FADE */
+    .fade { animation: fadeUp 0.5s ease both; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
 
-    /* Utility classes (ex-Tailwind) */
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 999px; }
+
+    /* UTILITY */
     .hidden { display: none !important; }
     .overflow-auto { overflow: auto; }
   </style>
@@ -394,7 +206,38 @@
     </div>
   </div>
 
-  <!-- EMPTY -->
+  <!-- LEGENDA CAMPI EXCEL -->
+  <div class="legend-box fade mb">
+    <h3>📋 Guida ai campi Excel</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Scarica il template e compila ogni riga con una sessione. Ecco cosa inserire in ogni colonna:</p>
+    <div class="legend-grid">
+      <div class="legend-item"><div class="l-field">Date</div><div class="l-type">📅 Data (YYYY-MM-DD)</div><div class="l-vals">Es: 2024-09-15</div></div>
+      <div class="legend-item"><div class="l-field">Season</div><div class="l-type">📆 Stagione</div><div class="l-vals">Es: 2024/25 · 2023/24</div></div>
+      <div class="legend-item"><div class="l-field">SessionType</div><div class="l-type">🔠 Tipo sessione</div><div class="l-vals">Match · Training</div></div>
+      <div class="legend-item"><div class="l-field">Team</div><div class="l-type">🏟 La tua squadra</div><div class="l-vals">Es: Malva FC</div></div>
+      <div class="legend-item"><div class="l-field">Opponent</div><div class="l-type">⚔️ Avversario (solo Match)</div><div class="l-vals">Es: Siena · Pisa (vuoto se Training)</div></div>
+      <div class="legend-item"><div class="l-field">Venue</div><div class="l-type">🏠 Casa o trasferta</div><div class="l-vals">Home · Away (vuoto se Training)</div></div>
+      <div class="legend-item"><div class="l-field">ScoreUs</div><div class="l-type">⚽ Gol fatti dalla tua squadra</div><div class="l-vals">Numero intero: 0, 1, 2, 3... (vuoto se Training)</div></div>
+      <div class="legend-item"><div class="l-field">ScoreThem</div><div class="l-type">⚽ Gol subiti</div><div class="l-vals">Numero intero: 0, 1, 2, 3... (vuoto se Training)</div></div>
+      <div class="legend-item"><div class="l-field">Position</div><div class="l-type">🎯 Ruolo in campo</div><div class="l-vals">GK · CB · LB · RB · CDM · CM · CAM · LW · RW · CF · ST</div></div>
+      <div class="legend-item"><div class="l-field">Starter</div><div class="l-type">🔵 Titolare o riserva</div><div class="l-vals">Yes · No</div></div>
+      <div class="legend-item"><div class="l-field">Goals</div><div class="l-type">⚽ Tuoi gol personali</div><div class="l-vals">Numero intero: 0, 1, 2...</div></div>
+      <div class="legend-item"><div class="l-field">Assists</div><div class="l-type">🎯 Tuoi assist</div><div class="l-vals">Numero intero: 0, 1, 2...</div></div>
+      <div class="legend-item"><div class="l-field">Rating</div><div class="l-type">⭐ Il tuo voto (1–10)</div><div class="l-vals">Es: 6.5 · 7.0 · 8.5</div></div>
+      <div class="legend-item"><div class="l-field">PhysicalCondition</div><div class="l-type">💪 Condizione fisica (1–10)</div><div class="l-vals">1=pessima · 5=media · 10=perfetta</div></div>
+      <div class="legend-item"><div class="l-field">MentalCondition</div><div class="l-type">🧠 Condizione mentale (1–10)</div><div class="l-vals">1=pessima · 5=media · 10=perfetta</div></div>
+      <div class="legend-item"><div class="l-field">Confidence</div><div class="l-type">🔥 Fiducia in sé stesso (1–10)</div><div class="l-vals">1=nessuna · 5=normale · 10=massima</div></div>
+      <div class="legend-item"><div class="l-field">PassingQuality</div><div class="l-type">🔵 Qualità dei passaggi (1–10)</div><div class="l-vals">Autovalutazione da 1 a 10</div></div>
+      <div class="legend-item"><div class="l-field">FinishingQuality</div><div class="l-type">🎯 Qualità della finalizzazione (1–10)</div><div class="l-vals">Autovalutazione da 1 a 10</div></div>
+      <div class="legend-item"><div class="l-field">DefensivePerformance</div><div class="l-type">🛡 Performance difensiva (1–10)</div><div class="l-vals">Autovalutazione da 1 a 10</div></div>
+      <div class="legend-item"><div class="l-field">SprintLevel</div><div class="l-type">⚡ Velocità/Sprint (1–10)</div><div class="l-vals">Autovalutazione da 1 a 10</div></div>
+      <div class="legend-item"><div class="l-field">RecoveryLevel</div><div class="l-type">❤️ Livello recupero (1–10)</div><div class="l-vals">Autovalutazione da 1 a 10</div></div>
+      <div class="legend-item"><div class="l-field">Minutes</div><div class="l-type">⏱ Minuti giocati/allenati</div><div class="l-vals">Es: 90 · 45 · 60</div></div>
+      <div class="legend-item"><div class="l-field">Outcome</div><div class="l-type">🏆 Risultato partita</div><div class="l-vals">Win · Draw · Loss (vuoto se Training)</div></div>
+    </div>
+  </div>
+
+  <!-- EMPTY STATE -->
   <div id="emptyState" class="fade">
     <div style="font-size:72px;margin-bottom:16px;">⚽</div>
     <h2>Carica i tuoi dati</h2>
@@ -413,6 +256,11 @@
           <option value="">Tutti i tipi</option>
           <option value="Match">Partita</option>
           <option value="Training">Allenamento</option>
+        </select>
+        <select id="venueFilter">
+          <option value="">Casa + Trasferta</option>
+          <option value="Home">Casa 🏠</option>
+          <option value="Away">Trasferta ✈️</option>
         </select>
         <select id="starterFilter">
           <option value="">Tutti i ruoli</option>
@@ -435,7 +283,7 @@
     <!-- KPI -->
     <div id="kpiGrid" class="kpi-grid mb fade"></div>
 
-    <!-- PATTERNS - REAL -->
+    <!-- PATTERNS -->
     <div class="grid-3 mb fade" id="patternGrid"></div>
 
     <!-- CHARTS ROW 1 -->
@@ -454,7 +302,7 @@
           <span style="font-size:11px;background:rgba(6,214,160,0.15);color:var(--accent2);padding:4px 12px;border-radius:999px;font-weight:700;">ATTACCO</span>
         </div>
         <div class="chart-wrap"><canvas id="goalChart"></canvas></div>
-        <div class="chart-info">Gol (barre) e assist (barre) per sessione. Utile per valutare l'impatto offensivo e i periodi di forma.</div>
+        <div class="chart-info">Gol e assist per sessione. Utile per valutare l'impatto offensivo e i periodi di forma.</div>
       </div>
     </div>
 
@@ -466,7 +314,7 @@
           <span style="font-size:11px;background:rgba(245,158,11,0.15);color:var(--accent3);padding:4px 12px;border-radius:999px;font-weight:700;">CONDIZIONE</span>
         </div>
         <div class="chart-wrap"><canvas id="conditionChart"></canvas></div>
-        <div class="chart-info">Confronto tra condizione fisica e mentale. Identifica periodi di affaticamento, recupero e cali di fiducia.</div>
+        <div class="chart-info">Confronto tra condizione fisica e mentale. Identifica periodi di affaticamento e cali di fiducia.</div>
       </div>
       <div class="card">
         <div class="section-header">
@@ -474,7 +322,7 @@
           <span style="font-size:11px;background:rgba(168,85,247,0.15);color:#c084fc;padding:4px 12px;border-radius:999px;font-weight:700;">PROFILO</span>
         </div>
         <div class="chart-wrap"><canvas id="radarChart"></canvas></div>
-        <div class="chart-info">Rappresentazione visiva del tuo profilo: passaggio, finalizzazione, difesa, velocità e fiducia.</div>
+        <div class="chart-info">Profilo visivo: passaggio, finalizzazione, difesa, velocità, fiducia e recupero.</div>
       </div>
     </div>
 
@@ -486,7 +334,7 @@
           <span style="font-size:11px;background:rgba(239,68,68,0.15);color:var(--accent4);padding:4px 12px;border-radius:999px;font-weight:700;">CARICO</span>
         </div>
         <div class="chart-wrap"><canvas id="sessionChart"></canvas></div>
-        <div class="chart-info">Distribuzione tra partite ufficiali e allenamenti durante il periodo selezionato.</div>
+        <div class="chart-info">Distribuzione tra partite ufficiali e allenamenti nel periodo selezionato.</div>
       </div>
       <div class="card">
         <div class="section-header">
@@ -498,46 +346,16 @@
       </div>
     </div>
 
-    <!-- STORICO CARRIERA - NUOVO GRAFICO FULL WIDTH -->
-    <div class="card mb fade">
-      <div class="section-header">
-        <div><div class="section-title">Storico Carriera</div><div class="section-sub">Andamento completo di tutti i parametri chiave nel tempo</div></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;" id="careerLegendToggles"></div>
-      </div>
-      <div style="position:relative;height:320px;"><canvas id="careerHistoryChart"></canvas></div>
-      <div class="chart-info">Visualizzazione multi-linea dell'intera carriera: ogni metrica può essere attivata/disattivata. Utile per identificare correlazioni visive tra parametri nel lungo periodo.</div>
-    </div>
-
-    <!-- AVVERSARI - NUOVO GRAFICO + TABELLA -->
-    <div class="card mb fade">
-      <div class="section-header">
-        <div><div class="section-title">Avversari Affrontati</div><div class="section-sub">Performance contro ogni squadra (filtrato)</div></div>
-        <span style="font-size:11px;background:rgba(6,214,160,0.15);color:var(--accent2);padding:4px 12px;border-radius:999px;font-weight:700;">AVVERSARI</span>
-      </div>
-      <div style="position:relative;height:300px;margin-bottom:24px;"><canvas id="opponentChart"></canvas></div>
-      <div class="overflow-auto">
-        <table class="opp-table" id="opponentTable">
-          <thead>
-            <tr>
-              <th>Avversario</th>
-              <th>P</th>
-              <th>V</th>
-              <th>N</th>
-              <th>S</th>
-              <th>Gol</th>
-              <th>Assist</th>
-              <th>Rating Medio</th>
-              <th>Miglior Perf</th>
-              <th>Risultati</th>
-            </tr>
-          </thead>
-          <tbody id="opponentTableBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- RISULTATI WIN/DRAW/LOSS CHART -->
+    <!-- CASA VS TRASFERTA -->
     <div class="grid-2 mb fade">
+      <div class="card">
+        <div class="section-header">
+          <div><div class="section-title">Casa vs Trasferta</div><div class="section-sub">Rendimento per venue</div></div>
+          <span style="font-size:11px;background:rgba(59,130,246,0.15);color:var(--accent);padding:4px 12px;border-radius:999px;font-weight:700;">VENUE</span>
+        </div>
+        <div class="chart-wrap"><canvas id="venueChart"></canvas></div>
+        <div id="venueInsight" class="insight"></div>
+      </div>
       <div class="card">
         <div class="section-header">
           <div><div class="section-title">Distribuzione Risultati</div><div class="section-sub">Vittorie, pareggi e sconfitte</div></div>
@@ -545,12 +363,67 @@
         <div class="chart-wrap"><canvas id="outcomeChart"></canvas></div>
         <div id="outcomeInsight" class="insight"></div>
       </div>
+    </div>
+
+    <!-- PUNTEGGIO PARTITE -->
+    <div class="card mb fade">
+      <div class="section-header">
+        <div><div class="section-title">Risultati Gara</div><div class="section-sub">Punteggi e andamento squadra partita per partita</div></div>
+        <span style="font-size:11px;background:rgba(6,214,160,0.15);color:var(--accent2);padding:4px 12px;border-radius:999px;font-weight:700;">PUNTEGGI</span>
+      </div>
+      <div style="position:relative;height:280px;"><canvas id="scoreChart"></canvas></div>
+      <div class="chart-info">Gol fatti e subiti dalla tua squadra in ogni partita. Permette di vedere la solidità difensiva e offensiva del collettivo.</div>
+    </div>
+
+    <!-- STORICO CARRIERA -->
+    <div class="card mb fade">
+      <div class="section-header">
+        <div><div class="section-title">Storico Carriera</div><div class="section-sub">Andamento completo di tutti i parametri chiave nel tempo</div></div>
+      </div>
+      <div style="position:relative;height:320px;"><canvas id="careerHistoryChart"></canvas></div>
+      <div class="chart-info">Visualizzazione multi-linea dell'intera carriera. Utile per identificare correlazioni visive tra parametri nel lungo periodo.</div>
+    </div>
+
+    <!-- RATING PER POSIZIONE -->
+    <div class="grid-2 mb fade">
       <div class="card">
         <div class="section-header">
           <div><div class="section-title">Rating per Posizione</div><div class="section-sub">Dove rendi di più</div></div>
         </div>
         <div class="chart-wrap"><canvas id="positionChart"></canvas></div>
         <div class="chart-info">Media del tuo voto nelle diverse posizioni in cui hai giocato.</div>
+      </div>
+      <div class="card">
+        <div class="section-header">
+          <div><div class="section-title">Gol per Avversario</div><div class="section-sub">Contro chi segni di più</div></div>
+        </div>
+        <div class="chart-wrap"><canvas id="goalsByOpponentChart"></canvas></div>
+        <div class="chart-info">Totale gol segnati contro ogni avversario nella selezione corrente.</div>
+      </div>
+    </div>
+
+    <!-- AVVERSARI -->
+    <div class="card mb fade">
+      <div class="section-header">
+        <div><div class="section-title">Avversari Affrontati</div><div class="section-sub">Performance contro ogni squadra (filtrato)</div></div>
+        <span style="font-size:11px;background:rgba(6,214,160,0.15);color:var(--accent2);padding:4px 12px;border-radius:999px;font-weight:700;">AVVERSARI</span>
+      </div>
+      <div style="position:relative;height:300px;margin-bottom:24px;"><canvas id="opponentChart"></canvas></div>
+      <div class="overflow-auto">
+        <table class="opp-table">
+          <thead>
+            <tr>
+              <th>Avversario</th>
+              <th>P</th><th>V</th><th>N</th><th>S</th>
+              <th>Punteggi</th>
+              <th>🏠 Casa</th><th>✈️ Trasferta</th>
+              <th>Gol</th><th>Assist</th>
+              <th>Rating Medio</th><th>Peak</th>
+              <th>Ultimi 5</th>
+            </tr>
+          </thead>
+          <tbody id="opponentTableBody"></tbody>
+        </table>
       </div>
     </div>
 
@@ -570,7 +443,7 @@
       <div id="developmentCards" class="grid-4"></div>
     </div>
 
-    <!-- CORRELATIONS - REAL CALCULATED -->
+    <!-- CORRELATIONS -->
     <div class="card mb fade">
       <div class="section-header">
         <div><div class="section-title">Matrice Correlazioni</div><div class="section-sub">Relazioni statistiche reali tra le tue metriche</div></div>
@@ -596,7 +469,7 @@
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
             <input type="text" id="playerName" placeholder="Nome Giocatore"/>
             <input type="text" id="playerNumber" placeholder="Numero maglia"/>
-            <input type="text" id="playerPosition" placeholder="Posizione"/>
+            <input type="text" id="playerPosition" placeholder="Posizione (es: CM)"/>
             <input type="text" id="playerClub" placeholder="Club"/>
           </div>
           <button class="btn" onclick="exportSocialCard()">📸 Esporta PNG</button>
@@ -627,15 +500,16 @@
     <div class="card fade">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
         <div><div class="section-title">Storico Sessioni</div><div class="section-sub">Archivio completo</div></div>
-        <input type="text" id="searchInput" placeholder="🔍 Cerca..." class="search"/>
+        <input type="text" id="searchInput" placeholder="🔍 Cerca..." style="width:260px;"/>
       </div>
       <div style="overflow:auto;">
         <table class="data-table">
           <thead>
             <tr>
               <th>Data</th><th>Stagione</th><th>Tipo</th><th>Team</th><th>Avversario</th>
+              <th>Venue</th><th>Risultato</th><th>Punteggio</th>
               <th>Pos</th><th>Titolare</th><th>Gol</th><th>Assist</th><th>Voto</th>
-              <th>Fisico</th><th>Mentale</th><th>Fiducia</th><th>Minuti</th><th>Risultato</th>
+              <th>Fisico</th><th>Mentale</th><th>Fiducia</th><th>Minuti</th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -647,11 +521,10 @@
 </div><!-- /wrap -->
 
 <script>
-// ─── STATE ──────────────────────────────────────────────────────────────────
+// ─── STATE ───────────────────────────────────────────────────────────────────
 let allData = [], filteredData = [];
 const charts = {};
 
-// ─── INIT ────────────────────────────────────────────────────────────────────
 document.getElementById('excelFile').addEventListener('change', handleFile);
 document.getElementById('searchInput')?.addEventListener('input', searchTable);
 
@@ -660,6 +533,7 @@ window.onload = function() {
   if (saved) { allData = JSON.parse(saved); filteredData = allData; init(); }
 };
 
+// ─── FILE ────────────────────────────────────────────────────────────────────
 function handleFile(e) {
   const file = e.target.files[0]; if (!file) return;
   document.getElementById('fileLabel').textContent = file.name;
@@ -692,7 +566,6 @@ function init() {
 // ─── FILTERS ─────────────────────────────────────────────────────────────────
 function populateSeasonFilter() {
   const sel = document.getElementById('seasonFilter');
-  // keep first option only
   while (sel.options.length > 1) sel.remove(1);
   [...new Set(allData.map(d=>d.Season))].forEach(s => {
     const o = document.createElement('option'); o.value = s; o.text = s; sel.add(o);
@@ -702,6 +575,7 @@ function populateSeasonFilter() {
 function applyFilters() {
   const season  = document.getElementById('seasonFilter').value;
   const session = document.getElementById('sessionFilter').value;
+  const venue   = document.getElementById('venueFilter').value;
   const starter = document.getElementById('starterFilter').value;
   const outcome = document.getElementById('outcomeFilter').value;
   const start   = document.getElementById('startDate').value;
@@ -709,6 +583,7 @@ function applyFilters() {
   filteredData = allData.filter(item => {
     if (season  && item.Season      !== season)  return false;
     if (session && item.SessionType !== session) return false;
+    if (venue   && item.Venue       !== venue)   return false;
     if (starter && item.Starter     !== starter) return false;
     if (outcome && item.Outcome     !== outcome) return false;
     if (start   && item.Date < start)            return false;
@@ -719,7 +594,7 @@ function applyFilters() {
 }
 
 function resetFilters() {
-  ['seasonFilter','sessionFilter','starterFilter','outcomeFilter'].forEach(id => document.getElementById(id).value = '');
+  ['seasonFilter','sessionFilter','venueFilter','starterFilter','outcomeFilter'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('startDate').value = '';
   document.getElementById('endDate').value = '';
   filteredData = allData;
@@ -731,10 +606,13 @@ function updateDashboard(data) {
   generateKPI(data);
   generatePatterns(data);
   generateCharts(data);
+  generateVenueChart(data);
+  generateScoreChart(data);
   generateCareerHistory(data);
   generateOpponentAnalysis(data);
   generateOutcomeChart(data);
   generatePositionChart(data);
+  generateGoalsByOpponentChart(data);
   generateTimeline(data);
   generateDevelopment(data);
   generateCorrelations(data);
@@ -748,20 +626,30 @@ function generateKPI(data) {
   const matches = data.filter(d => d.SessionType === 'Match');
   const wins = matches.filter(d => d.Outcome === 'Win').length;
   const winRate = matches.length ? Math.round(wins / matches.length * 100) : 0;
+  const homeMatches = matches.filter(d => d.Venue === 'Home');
+  const awayMatches = matches.filter(d => d.Venue === 'Away');
+  const homeWinR = homeMatches.length ? Math.round(homeMatches.filter(d=>d.Outcome==='Win').length/homeMatches.length*100) : 0;
+  const awayWinR = awayMatches.length ? Math.round(awayMatches.filter(d=>d.Outcome==='Win').length/awayMatches.length*100) : 0;
+  const goalsScored = sum(matches,'ScoreUs');
+  const goalsConceded = sum(matches,'ScoreThem');
 
   const kpis = [
-    { label:'Overall', val: overall(data), color:'blue' },
-    { label:'Sessioni', val: data.length, color:'green' },
-    { label:'Gol', val: sum(data,'Goals'), color:'amber' },
-    { label:'Assist', val: sum(data,'Assists'), color:'accent' },
-    { label:'Rating Medio', val: average(data,'Rating'), color:'blue' },
-    { label:'G/90', val: goalsPer90(data), color:'green' },
-    { label:'Win Rate', val: winRate + '%', color:'amber' },
-    { label:'Consistenza', val: consistency(data), color:'blue' },
-    { label:'Avg Titolare', val: starterAverage(data), color:'green' },
-    { label:'Avg Riserva', val: subAverage(data), color:'amber' },
-    { label:'Minuti Tot', val: sum(data,'Minutes'), color:'blue' },
-    { label:'G+A', val: sum(data,'Goals') + sum(data,'Assists'), color:'green' },
+    { label:'Overall',       val: overall(data),               color:'blue'  },
+    { label:'Sessioni',      val: data.length,                 color:'green' },
+    { label:'Gol',           val: sum(data,'Goals'),           color:'amber' },
+    { label:'Assist',        val: sum(data,'Assists'),         color:'green' },
+    { label:'Rating Medio',  val: average(data,'Rating'),      color:'blue'  },
+    { label:'G/90',          val: goalsPer90(data),            color:'green' },
+    { label:'Win Rate',      val: winRate + '%',               color:'amber' },
+    { label:'Consistenza',   val: consistency(data),           color:'blue'  },
+    { label:'Avg Titolare',  val: starterAverage(data),        color:'green' },
+    { label:'Avg Riserva',   val: subAverage(data),            color:'amber' },
+    { label:'Minuti Tot',    val: sum(data,'Minutes'),         color:'blue'  },
+    { label:'G+A',           val: sum(data,'Goals')+sum(data,'Assists'), color:'green' },
+    { label:'Win% Casa',     val: homeWinR + '%',              color:'amber' },
+    { label:'Win% Trasferta',val: awayWinR + '%',              color:'blue'  },
+    { label:'Gol Squadra',   val: goalsScored,                 color:'green' },
+    { label:'Gol Subiti',    val: goalsConceded,               color:'red'   },
   ];
   document.getElementById('kpiGrid').innerHTML = kpis.map(k => `
     <div class="kpi ${k.color}">
@@ -770,53 +658,53 @@ function generateKPI(data) {
     </div>`).join('');
 }
 
-// ─── PATTERNS (REAL CALCULATIONS) ────────────────────────────────────────────
+// ─── PATTERNS ────────────────────────────────────────────────────────────────
 function generatePatterns(data) {
   const patterns = [];
 
-  // 1. Physical ↔ Rating correlation narrative
+  // 1. Physical vs Rating
   const phys = pearson(data, 'PhysicalCondition', 'Rating');
-  const physScore = Math.abs(phys);
-  const physLabel = phys > 0.4 ? 'forte correlazione positiva' : phys > 0.2 ? 'correlazione moderata' : 'correlazione debole';
-  const physClass = physScore > 0.4 ? 'score-positive' : physScore > 0.2 ? 'score-warning' : 'score-negative';
   const highPhys = data.filter(d => d.PhysicalCondition >= 7);
   const lowPhys  = data.filter(d => d.PhysicalCondition < 7);
   const diffPhys = (parseFloat(average(highPhys,'Rating')) - parseFloat(average(lowPhys,'Rating'))).toFixed(1);
+  const physClass = Math.abs(phys) > 0.4 ? 'score-positive' : Math.abs(phys) > 0.2 ? 'score-warning' : 'score-negative';
   patterns.push({
     icon:'💪', label:'Pattern Performance',
-    value: `Con condizione fisica ≥7 il tuo rating medio è +${diffPhys} rispetto alle sessioni sotto soglia. ${physLabel.charAt(0).toUpperCase()+physLabel.slice(1)} tra fisico e voto.`,
+    value: `Con condizione fisica ≥7 il tuo rating è +${diffPhys} rispetto alle sessioni sotto soglia. Correlazione Pearson: ${phys.toFixed(2)}.`,
     badge: `r = ${phys.toFixed(2)}`, badgeClass: physClass
   });
 
-  // 2. Starter vs sub
-  const starters = data.filter(d => d.Starter === 'Yes' && d.SessionType === 'Match');
-  const subs     = data.filter(d => d.Starter === 'No'  && d.SessionType === 'Match');
-  const diffStart = (parseFloat(average(starters,'Rating')) - parseFloat(average(subs,'Rating'))).toFixed(1);
-  const startBetter = parseFloat(diffStart) > 0;
+  // 2. Home vs Away rating
+  const homeM = data.filter(d=>d.SessionType==='Match'&&d.Venue==='Home');
+  const awayM = data.filter(d=>d.SessionType==='Match'&&d.Venue==='Away');
+  const homeAvg = parseFloat(average(homeM,'Rating'));
+  const awayAvg = parseFloat(average(awayM,'Rating'));
+  const diff = (homeAvg - awayAvg).toFixed(1);
+  const venueClass = homeAvg > awayAvg ? 'score-positive' : awayAvg > homeAvg ? 'score-warning' : 'score-positive';
   patterns.push({
-    icon:'🔵', label:'Pattern Sviluppo',
-    value: startBetter
-      ? `Da titolare rendi +${diffStart} punti in più rispetto alle partite da subentrante. Il tuo impatto è maggiore quando parte dall'inizio.`
-      : `Da subentrante rendi ${Math.abs(diffStart)} punti in più rispetto a quando sei titolare. Eccelli nell'impatto a gara in corso.`,
-    badge: startBetter ? '↑ Titolare' : '↑ Riserva',
-    badgeClass: 'score-positive'
+    icon:'🏟', label:'Pattern Casa/Trasferta',
+    value: homeM.length && awayM.length
+      ? `In casa rating medio ${homeAvg.toFixed(1)}, in trasferta ${awayAvg.toFixed(1)}. Differenza: ${diff > 0 ? '+' : ''}${diff}. ${parseFloat(diff) > 0 ? 'Rendi meglio in casa.' : parseFloat(diff) < 0 ? 'Rendi meglio in trasferta.' : 'Rendimento uniforme.'}`
+      : 'Dati insufficienti su casa/trasferta. Aggiungi il campo Venue nel tuo Excel.',
+    badge: parseFloat(diff) > 0 ? '🏠 Meglio in casa' : parseFloat(diff) < 0 ? '✈️ Meglio in trasferta' : '= Pari',
+    badgeClass: venueClass
   });
 
-  // 3. Training frequency vs next match rating
+  // 3. Training frequency
   const matchRows = data.filter(d => d.SessionType === 'Match');
-  let highTrainRatings = [], lowTrainRatings = [];
-  matchRows.forEach((m, i) => {
-    const prevSessions = data.slice(Math.max(0,i-5), i);
-    const trainCount = prevSessions.filter(d => d.SessionType === 'Training').length;
-    if (trainCount >= 2) highTrainRatings.push(Number(m.Rating||0));
-    else lowTrainRatings.push(Number(m.Rating||0));
+  let highR = [], lowR = [];
+  matchRows.forEach((m,i) => {
+    const prev = data.slice(Math.max(0,i-5),i);
+    const tc = prev.filter(d=>d.SessionType==='Training').length;
+    if (tc >= 2) highR.push(Number(m.Rating||0));
+    else lowR.push(Number(m.Rating||0));
   });
-  const avgHigh = highTrainRatings.length ? (highTrainRatings.reduce((a,b)=>a+b,0)/highTrainRatings.length).toFixed(1) : 'N/A';
-  const avgLow  = lowTrainRatings.length  ? (lowTrainRatings.reduce((a,b)=>a+b,0)/lowTrainRatings.length).toFixed(1) : 'N/A';
-  const trainBetter = parseFloat(avgHigh) > parseFloat(avgLow);
+  const avgH = highR.length ? (highR.reduce((a,b)=>a+b,0)/highR.length).toFixed(1) : 'N/A';
+  const avgL = lowR.length  ? (lowR.reduce((a,b)=>a+b,0)/lowR.length).toFixed(1) : 'N/A';
+  const trainBetter = parseFloat(avgH) > parseFloat(avgL);
   patterns.push({
     icon:'🏋️', label:'Pattern Allenamento',
-    value: `Con ≥2 allenamenti prima di una partita il tuo rating medio è ${avgHigh}, contro ${avgLow} con meno preparazione. ${trainBetter ? 'Allenarsi di più ti aiuta.' : 'Il riposo pre-partita sembra avvantaggiarti.'}`,
+    value: `Con ≥2 allenamenti pre-partita rating medio ${avgH}, con meno preparazione ${avgL}. ${trainBetter ? 'Allenarsi di più ti aiuta.' : 'Il riposo pre-partita ti avvantaggia.'}`,
     badge: trainBetter ? '↑ Con allenamenti' : '↑ Con riposo',
     badgeClass: trainBetter ? 'score-positive' : 'score-warning'
   });
@@ -829,79 +717,72 @@ function generatePatterns(data) {
     </div>`).join('');
 }
 
-// ─── CHARTS ───────────────────────────────────────────────────────────────────
-const PALETTE = {
+// ─── CHART DEFAULTS ───────────────────────────────────────────────────────────
+const P = {
   blue:   { line:'#3b82f6', fill:'rgba(59,130,246,0.1)' },
   green:  { line:'#06d6a0', fill:'rgba(6,214,160,0.1)' },
   amber:  { line:'#f59e0b', fill:'rgba(245,158,11,0.1)' },
   red:    { line:'#ef4444', fill:'rgba(239,68,68,0.1)' },
   purple: { line:'#c084fc', fill:'rgba(192,132,252,0.1)' },
 };
-
-const chartDefaults = {
-  responsive: true, maintainAspectRatio: false,
-  plugins: { legend: { labels: { color:'#94a3b8', font:{ family:'DM Sans' }, boxWidth:12 } } },
-  scales: {
-    x: { ticks:{ color:'#475569', font:{ size:10 }, maxTicksLimit:12 }, grid:{ color:'rgba(255,255,255,0.04)' } },
-    y: { ticks:{ color:'#475569', font:{ size:10 } }, grid:{ color:'rgba(255,255,255,0.04)' } }
+const CD = {
+  responsive:true, maintainAspectRatio:false,
+  plugins:{ legend:{ labels:{ color:'#94a3b8', font:{family:'DM Sans'}, boxWidth:12 } } },
+  scales:{
+    x:{ ticks:{ color:'#475569', font:{size:10}, maxTicksLimit:14 }, grid:{ color:'rgba(255,255,255,0.04)' } },
+    y:{ ticks:{ color:'#475569', font:{size:10} }, grid:{ color:'rgba(255,255,255,0.04)' } }
   }
 };
+function dc(id) { if(charts[id]){ charts[id].destroy(); delete charts[id]; } }
 
-function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
-
+// ─── MAIN CHARTS ──────────────────────────────────────────────────────────────
 function generateCharts(data) {
   const labels = data.map(d => d.Date || '');
-
-  // Rating Evolution with moving average
-  destroyChart('ratingChart');
   const ratings = data.map(d => Number(d.Rating||0));
-  const ma3 = ratings.map((_, i) => {
-    const slice = ratings.slice(Math.max(0, i-2), i+1);
-    return (slice.reduce((a,b)=>a+b,0)/slice.length).toFixed(2);
+  const ma3 = ratings.map((_,i) => {
+    const s = ratings.slice(Math.max(0,i-2),i+1);
+    return (s.reduce((a,b)=>a+b,0)/s.length).toFixed(2);
   });
+
+  // Rating
+  dc('ratingChart');
   charts['ratingChart'] = new Chart(document.getElementById('ratingChart'), {
     type:'line',
-    data:{ labels,
-      datasets:[
-        { label:'Rating', data:ratings, borderColor:PALETTE.blue.line, backgroundColor:PALETTE.blue.fill, fill:true, tension:0.4, borderWidth:2, pointRadius:3 },
-        { label:'Media mobile (3)', data:ma3, borderColor:'rgba(245,158,11,0.7)', backgroundColor:'transparent', fill:false, tension:0.4, borderWidth:1.5, borderDash:[4,4], pointRadius:0 }
-      ]},
-    options: { ...chartDefaults, plugins:{ ...chartDefaults.plugins } }
+    data:{ labels, datasets:[
+      { label:'Rating', data:ratings, borderColor:P.blue.line, backgroundColor:P.blue.fill, fill:true, tension:0.4, borderWidth:2, pointRadius:3 },
+      { label:'Media mobile (3)', data:ma3, borderColor:'rgba(245,158,11,0.7)', backgroundColor:'transparent', fill:false, tension:0.4, borderWidth:1.5, borderDash:[4,4], pointRadius:0 }
+    ]}, options: JSON.parse(JSON.stringify(CD))
   });
 
-  // Goal/Assist stacked bar
-  destroyChart('goalChart');
+  // Goal/Assist
+  dc('goalChart');
   charts['goalChart'] = new Chart(document.getElementById('goalChart'), {
     type:'bar',
-    data:{ labels,
-      datasets:[
-        { label:'Gol', data:data.map(d=>Number(d.Goals||0)), backgroundColor:PALETTE.green.line, borderRadius:4 },
-        { label:'Assist', data:data.map(d=>Number(d.Assists||0)), backgroundColor:PALETTE.amber.line, borderRadius:4 }
-      ]},
-    options:{ ...chartDefaults, scales:{...chartDefaults.scales}, plugins:{...chartDefaults.plugins} }
+    data:{ labels, datasets:[
+      { label:'Gol', data:data.map(d=>Number(d.Goals||0)), backgroundColor:P.green.line, borderRadius:4 },
+      { label:'Assist', data:data.map(d=>Number(d.Assists||0)), backgroundColor:P.amber.line, borderRadius:4 }
+    ]}, options: JSON.parse(JSON.stringify(CD))
   });
 
-  // Physical vs Mental
-  destroyChart('conditionChart');
+  // Condition
+  dc('conditionChart');
   charts['conditionChart'] = new Chart(document.getElementById('conditionChart'), {
     type:'line',
-    data:{ labels,
-      datasets:[
-        { label:'Fisico', data:data.map(d=>Number(d.PhysicalCondition||0)), borderColor:PALETTE.blue.line, backgroundColor:PALETTE.blue.fill, fill:true, tension:0.4, borderWidth:2 },
-        { label:'Mentale', data:data.map(d=>Number(d.MentalCondition||0)), borderColor:PALETTE.purple.line, backgroundColor:PALETTE.purple.fill, fill:true, tension:0.4, borderWidth:2 }
-      ]},
-    options:{ ...chartDefaults }
+    data:{ labels, datasets:[
+      { label:'Fisico', data:data.map(d=>Number(d.PhysicalCondition||0)), borderColor:P.blue.line, backgroundColor:P.blue.fill, fill:true, tension:0.4, borderWidth:2 },
+      { label:'Mentale', data:data.map(d=>Number(d.MentalCondition||0)), borderColor:P.purple.line, backgroundColor:P.purple.fill, fill:true, tension:0.4, borderWidth:2 }
+    ]}, options: JSON.parse(JSON.stringify(CD))
   });
 
   // Radar
-  destroyChart('radarChart');
+  dc('radarChart');
   charts['radarChart'] = new Chart(document.getElementById('radarChart'), {
     type:'radar',
     data:{
       labels:['Passaggio','Finalizzazione','Difesa','Velocità','Fiducia','Recupero'],
       datasets:[{ label:'Il tuo profilo',
         data:['PassingQuality','FinishingQuality','DefensivePerformance','SprintLevel','Confidence','RecoveryLevel'].map(k=>parseFloat(average(data,k))),
-        borderColor:PALETTE.blue.line, backgroundColor:PALETTE.blue.fill, borderWidth:2, pointBackgroundColor:PALETTE.blue.line
+        borderColor:P.blue.line, backgroundColor:P.blue.fill, borderWidth:2, pointBackgroundColor:P.blue.line
       }]},
     options:{ responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{ labels:{ color:'#94a3b8' } } },
@@ -910,57 +791,110 @@ function generateCharts(data) {
   });
 
   // Session doughnut
-  destroyChart('sessionChart');
+  dc('sessionChart');
   charts['sessionChart'] = new Chart(document.getElementById('sessionChart'), {
     type:'doughnut',
-    data:{
-      labels:['Partite','Allenamenti'],
-      datasets:[{ data:[data.filter(d=>d.SessionType==='Match').length, data.filter(d=>d.SessionType==='Training').length],
-        backgroundColor:[PALETTE.blue.line, PALETTE.green.line], borderWidth:0, hoverOffset:8 }]},
-    options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{ labels:{ color:'#94a3b8', font:{family:'DM Sans'} } } },
-      cutout:'65%'
-    }
+    data:{ labels:['Partite','Allenamenti'], datasets:[{
+      data:[data.filter(d=>d.SessionType==='Match').length, data.filter(d=>d.SessionType==='Training').length],
+      backgroundColor:[P.blue.line, P.green.line], borderWidth:0, hoverOffset:8
+    }]},
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'65%', plugins:{ legend:{ labels:{ color:'#94a3b8', font:{family:'DM Sans'} } } } }
   });
 
   // Season bar
-  destroyChart('seasonChart');
+  dc('seasonChart');
   const seasons = [...new Set(data.map(d=>d.Season))];
   charts['seasonChart'] = new Chart(document.getElementById('seasonChart'), {
     type:'bar',
-    data:{ labels:seasons,
-      datasets:[{ label:'Rating Medio', data:seasons.map(s=>parseFloat(average(data.filter(d=>d.Season===s),'Rating'))),
-        backgroundColor:seasons.map((_,i)=>i%2===0?PALETTE.blue.line:PALETTE.green.line), borderRadius:8, borderSkipped:false }]},
-    options:{ ...chartDefaults }
+    data:{ labels:seasons, datasets:[{
+      label:'Rating Medio',
+      data:seasons.map(s=>parseFloat(average(data.filter(d=>d.Season===s),'Rating'))),
+      backgroundColor:seasons.map((_,i)=>i%2===0?P.blue.line:P.green.line), borderRadius:8, borderSkipped:false
+    }]}, options: JSON.parse(JSON.stringify(CD))
   });
 }
 
-// ─── CAREER HISTORY (multi-line full) ────────────────────────────────────────
+// ─── VENUE CHART ─────────────────────────────────────────────────────────────
+function generateVenueChart(data) {
+  dc('venueChart');
+  const matches = data.filter(d => d.SessionType === 'Match');
+  const homeM = matches.filter(d=>d.Venue==='Home');
+  const awayM = matches.filter(d=>d.Venue==='Away');
+  charts['venueChart'] = new Chart(document.getElementById('venueChart'), {
+    type:'bar',
+    data:{
+      labels:['Partite','Vittorie','Pareggi','Sconfitte','Rating Medio','Gol Segnati'],
+      datasets:[
+        { label:'🏠 Casa', backgroundColor:'#3b82f6', borderRadius:6,
+          data:[
+            homeM.length,
+            homeM.filter(d=>d.Outcome==='Win').length,
+            homeM.filter(d=>d.Outcome==='Draw').length,
+            homeM.filter(d=>d.Outcome==='Loss').length,
+            parseFloat(average(homeM,'Rating')),
+            sum(homeM,'ScoreUs')
+          ]},
+        { label:'✈️ Trasferta', backgroundColor:'#f59e0b', borderRadius:6,
+          data:[
+            awayM.length,
+            awayM.filter(d=>d.Outcome==='Win').length,
+            awayM.filter(d=>d.Outcome==='Draw').length,
+            awayM.filter(d=>d.Outcome==='Loss').length,
+            parseFloat(average(awayM,'Rating')),
+            sum(awayM,'ScoreUs')
+          ]}
+      ]},
+    options: JSON.parse(JSON.stringify(CD))
+  });
+  const homeWR = homeM.length ? Math.round(homeM.filter(d=>d.Outcome==='Win').length/homeM.length*100) : 0;
+  const awayWR = awayM.length ? Math.round(awayM.filter(d=>d.Outcome==='Win').length/awayM.length*100) : 0;
+  document.getElementById('venueInsight').innerHTML =
+    `<strong>Casa:</strong> ${homeM.length} partite, ${homeWR}% vittorie, rating medio ${average(homeM,'Rating')} &nbsp;|&nbsp; <strong>Trasferta:</strong> ${awayM.length} partite, ${awayWR}% vittorie, rating medio ${average(awayM,'Rating')}`;
+}
+
+// ─── SCORE CHART ─────────────────────────────────────────────────────────────
+function generateScoreChart(data) {
+  dc('scoreChart');
+  const matches = data.filter(d => d.SessionType === 'Match' && (d.ScoreUs !== undefined || d.ScoreThem !== undefined));
+  if (!matches.length) {
+    dc('scoreChart');
+    return;
+  }
+  const labels = matches.map(d => {
+    const v = d.Venue === 'Home' ? '🏠' : d.Venue === 'Away' ? '✈️' : '';
+    return `${v} ${d.Opponent||'—'} (${d.Date||''})`;
+  });
+  charts['scoreChart'] = new Chart(document.getElementById('scoreChart'), {
+    type:'bar',
+    data:{ labels, datasets:[
+      { label:'Gol fatti', data:matches.map(d=>Number(d.ScoreUs||0)), backgroundColor:P.green.line, borderRadius:6, borderSkipped:false },
+      { label:'Gol subiti', data:matches.map(d=>Number(d.ScoreThem||0)), backgroundColor:P.red.line, borderRadius:6, borderSkipped:false }
+    ]},
+    options:{ ...JSON.parse(JSON.stringify(CD)),
+      scales:{ x:{ ticks:{ color:'#475569', font:{size:9}, maxTicksLimit:20 }, grid:{ color:'rgba(255,255,255,0.04)' } }, y:{ ticks:{ color:'#475569', stepSize:1 }, grid:{ color:'rgba(255,255,255,0.04)' } } }
+    }
+  });
+}
+
+// ─── CAREER HISTORY ───────────────────────────────────────────────────────────
 function generateCareerHistory(data) {
-  destroyChart('careerHistoryChart');
+  dc('careerHistoryChart');
   const labels = data.map(d => d.Date || '');
   const series = [
-    { key:'Rating',             label:'Rating',    color:'#3b82f6' },
-    { key:'PhysicalCondition',  label:'Fisico',    color:'#06d6a0' },
-    { key:'MentalCondition',    label:'Mentale',   color:'#c084fc' },
-    { key:'Confidence',         label:'Fiducia',   color:'#f59e0b' },
-    { key:'PassingQuality',     label:'Passaggio', color:'#38bdf8' },
-    { key:'FinishingQuality',   label:'Finaliz.',  color:'#ef4444' },
-    { key:'SprintLevel',        label:'Velocità',  color:'#a3e635' },
+    { key:'Rating',            label:'Rating',    color:'#3b82f6' },
+    { key:'PhysicalCondition', label:'Fisico',    color:'#06d6a0' },
+    { key:'MentalCondition',   label:'Mentale',   color:'#c084fc' },
+    { key:'Confidence',        label:'Fiducia',   color:'#f59e0b' },
+    { key:'PassingQuality',    label:'Passaggio', color:'#38bdf8' },
+    { key:'FinishingQuality',  label:'Finaliz.',  color:'#ef4444' },
+    { key:'SprintLevel',       label:'Velocità',  color:'#a3e635' },
   ];
-  const datasets = series.map(s => ({
-    label: s.label,
-    data: data.map(d => Number(d[s.key]||0)),
-    borderColor: s.color,
-    backgroundColor: 'transparent',
-    borderWidth: 1.8,
-    tension: 0.4,
-    pointRadius: 2,
-    hidden: false,
-  }));
   charts['careerHistoryChart'] = new Chart(document.getElementById('careerHistoryChart'), {
     type:'line',
-    data:{ labels, datasets },
+    data:{ labels, datasets: series.map(s=>({
+      label:s.label, data:data.map(d=>Number(d[s.key]||0)),
+      borderColor:s.color, backgroundColor:'transparent', borderWidth:1.8, tension:0.4, pointRadius:2
+    }))},
     options:{
       responsive:true, maintainAspectRatio:false,
       interaction:{ mode:'index', intersect:false },
@@ -979,7 +913,7 @@ function generateOpponentAnalysis(data) {
   const map = {};
   matches.forEach(m => {
     const k = m.Opponent;
-    if (!map[k]) map[k] = { name:k, games:0, wins:0, draws:0, losses:0, goals:0, assists:0, ratings:[], outcomes:[] };
+    if (!map[k]) map[k] = { name:k, games:0, wins:0, draws:0, losses:0, goals:0, assists:0, ratings:[], outcomes:[], home:0, away:0, scores:[] };
     map[k].games++;
     map[k].goals   += Number(m.Goals||0);
     map[k].assists += Number(m.Assists||0);
@@ -988,54 +922,60 @@ function generateOpponentAnalysis(data) {
     if (m.Outcome==='Win')  map[k].wins++;
     else if (m.Outcome==='Draw') map[k].draws++;
     else if (m.Outcome==='Loss') map[k].losses++;
+    if (m.Venue==='Home') map[k].home++;
+    else if (m.Venue==='Away') map[k].away++;
+    if (m.ScoreUs !== undefined && m.ScoreThem !== undefined)
+      map[k].scores.push(`${m.ScoreUs}-${m.ScoreThem}`);
   });
   const opponents = Object.values(map).sort((a,b) => b.games - a.games);
-  const avgRating = opp => opp.ratings.length ? (opp.ratings.reduce((a,b)=>a+b,0)/opp.ratings.length).toFixed(1) : '0';
-  const best = opp => Math.max(...opp.ratings).toFixed(1);
+  const avgR = opp => opp.ratings.length ? (opp.ratings.reduce((a,b)=>a+b,0)/opp.ratings.length).toFixed(1) : '0';
+  const bestR= opp => opp.ratings.length ? Math.max(...opp.ratings).toFixed(1) : '0';
 
-  // Chart
-  destroyChart('opponentChart');
+  dc('opponentChart');
   if (opponents.length) {
     charts['opponentChart'] = new Chart(document.getElementById('opponentChart'), {
       type:'bar',
       data:{
         labels: opponents.map(o=>o.name),
         datasets:[
-          { label:'Vittorie', data:opponents.map(o=>o.wins),   backgroundColor:'#06d6a0', borderRadius:4, borderSkipped:false },
-          { label:'Pareggi', data:opponents.map(o=>o.draws),   backgroundColor:'#f59e0b', borderRadius:4, borderSkipped:false },
-          { label:'Sconfitte', data:opponents.map(o=>o.losses),backgroundColor:'#ef4444', borderRadius:4, borderSkipped:false },
+          { label:'Vittorie',   data:opponents.map(o=>o.wins),   backgroundColor:'#06d6a0', borderRadius:4, borderSkipped:false },
+          { label:'Pareggi',    data:opponents.map(o=>o.draws),  backgroundColor:'#f59e0b', borderRadius:4, borderSkipped:false },
+          { label:'Sconfitte',  data:opponents.map(o=>o.losses), backgroundColor:'#ef4444', borderRadius:4, borderSkipped:false },
         ]},
-      options:{ ...chartDefaults, scales:{...chartDefaults.scales, x:{...chartDefaults.scales.x, stacked:false}, y:{...chartDefaults.scales.y, stacked:false, ticks:{...chartDefaults.scales.y.ticks, stepSize:1}}} }
+      options: JSON.parse(JSON.stringify(CD))
     });
   }
 
-  // Table
   document.getElementById('opponentTableBody').innerHTML = opponents.map(opp => {
-    const avg = avgRating(opp);
-    const color = parseFloat(avg) >= 7.5 ? 'var(--accent2)' : parseFloat(avg) >= 6.5 ? 'var(--accent3)' : 'var(--accent4)';
+    const avg = avgR(opp);
+    const color = parseFloat(avg)>=7.5?'var(--accent2)':parseFloat(avg)>=6.5?'var(--accent3)':'var(--accent4)';
     const resultBadges = opp.outcomes.slice(-5).map(o =>
-      o==='Win' ? '<span class="result-badge result-w">V</span>' :
-      o==='Draw' ? '<span class="result-badge result-d">N</span>' :
-      o==='Loss' ? '<span class="result-badge result-l">S</span>' : '').join(' ');
+      o==='Win'?'<span class="result-badge result-w">V</span>':
+      o==='Draw'?'<span class="result-badge result-d">N</span>':
+      o==='Loss'?'<span class="result-badge result-l">S</span>':'').join(' ');
+    const scoresStr = opp.scores.length ? opp.scores.slice(-3).join(', ') : '—';
     return `<tr>
       <td><strong>${opp.name}</strong></td>
       <td>${opp.games}</td>
       <td style="color:var(--accent2);">${opp.wins}</td>
       <td style="color:var(--accent3);">${opp.draws}</td>
       <td style="color:var(--accent4);">${opp.losses}</td>
+      <td style="font-size:12px;color:var(--muted);">${scoresStr}</td>
+      <td><span class="venue-home">🏠 ${opp.home}</span></td>
+      <td><span class="venue-away">✈️ ${opp.away}</span></td>
       <td>${opp.goals}</td>
       <td>${opp.assists}</td>
       <td style="color:${color};font-weight:700;">${avg}</td>
-      <td>${best(opp)}</td>
-      <td style="display:flex;gap:4px;flex-wrap:wrap;">${resultBadges}</td>
+      <td>${bestR(opp)}</td>
+      <td style="display:flex;gap:4px;flex-wrap:wrap;min-width:120px;">${resultBadges}</td>
     </tr>`;
   }).join('');
 }
 
 // ─── OUTCOME CHART ────────────────────────────────────────────────────────────
 function generateOutcomeChart(data) {
-  destroyChart('outcomeChart');
-  const matches = data.filter(d => d.SessionType === 'Match');
+  dc('outcomeChart');
+  const matches = data.filter(d=>d.SessionType==='Match');
   const w = matches.filter(d=>d.Outcome==='Win').length;
   const dr = matches.filter(d=>d.Outcome==='Draw').length;
   const l = matches.filter(d=>d.Outcome==='Loss').length;
@@ -1043,56 +983,72 @@ function generateOutcomeChart(data) {
     type:'doughnut',
     data:{ labels:['Vittorie','Pareggi','Sconfitte'],
       datasets:[{ data:[w,dr,l], backgroundColor:['#06d6a0','#f59e0b','#ef4444'], borderWidth:0, hoverOffset:8 }]},
-    options:{ responsive:true, maintainAspectRatio:false, cutout:'65%',
-      plugins:{ legend:{ labels:{ color:'#94a3b8', font:{family:'DM Sans'} } } }
-    }
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'65%', plugins:{ legend:{ labels:{ color:'#94a3b8', font:{family:'DM Sans'} } } } }
   });
   const wr = matches.length ? Math.round(w/matches.length*100) : 0;
-  const best = w > dr && w > l ? 'Ottima percentuale di vittorie' : dr > l ? 'Molti pareggi, lavora sul vincente' : 'Analizza le sconfitte per migliorare';
-  document.getElementById('outcomeInsight').innerHTML = `<strong>Win rate: ${wr}%</strong> — ${best}. Su ${matches.length} partite: ${w}V ${dr}N ${l}S.`;
+  document.getElementById('outcomeInsight').innerHTML =
+    `<strong>Win rate: ${wr}%</strong> — Su ${matches.length} partite: <strong style="color:var(--accent2)">${w}V</strong> <strong style="color:var(--accent3)">${dr}N</strong> <strong style="color:var(--accent4)">${l}S</strong>`;
 }
 
 // ─── POSITION CHART ───────────────────────────────────────────────────────────
 function generatePositionChart(data) {
-  destroyChart('positionChart');
+  dc('positionChart');
   const map = {};
   data.filter(d=>d.Position).forEach(d => {
     if (!map[d.Position]) map[d.Position] = [];
     map[d.Position].push(Number(d.Rating||0));
   });
   const positions = Object.keys(map);
-  const avgs = positions.map(p => (map[p].reduce((a,b)=>a+b,0)/map[p].length).toFixed(1));
+  const avgs = positions.map(p=>(map[p].reduce((a,b)=>a+b,0)/map[p].length).toFixed(1));
   charts['positionChart'] = new Chart(document.getElementById('positionChart'), {
     type:'bar',
-    data:{ labels:positions,
-      datasets:[{ label:'Rating Medio', data:avgs,
-        backgroundColor:avgs.map(v=>parseFloat(v)>=7.5?'#06d6a0':parseFloat(v)>=6.5?'#3b82f6':'#ef4444'),
-        borderRadius:8, borderSkipped:false }]},
-    options:{ ...chartDefaults, plugins:{ legend:{ display:false } } }
+    data:{ labels:positions, datasets:[{
+      label:'Rating Medio', data:avgs,
+      backgroundColor:avgs.map(v=>parseFloat(v)>=7.5?'#06d6a0':parseFloat(v)>=6.5?'#3b82f6':'#ef4444'),
+      borderRadius:8, borderSkipped:false
+    }]},
+    options:{ ...JSON.parse(JSON.stringify(CD)), plugins:{ legend:{ display:false } } }
   });
 }
 
-// ─── TIMELINE ────────────────────────────────────────────────────────────────
+// ─── GOALS BY OPPONENT ────────────────────────────────────────────────────────
+function generateGoalsByOpponentChart(data) {
+  dc('goalsByOpponentChart');
+  const matches = data.filter(d=>d.SessionType==='Match'&&d.Opponent);
+  const map = {};
+  matches.forEach(d=>{ map[d.Opponent]=(map[d.Opponent]||0)+Number(d.Goals||0); });
+  const sorted = Object.entries(map).sort((a,b)=>b[1]-a[1]);
+  charts['goalsByOpponentChart'] = new Chart(document.getElementById('goalsByOpponentChart'), {
+    type:'bar',
+    data:{ labels:sorted.map(e=>e[0]), datasets:[{
+      label:'Gol', data:sorted.map(e=>e[1]),
+      backgroundColor:'#06d6a0', borderRadius:6, borderSkipped:false
+    }]},
+    options:{ ...JSON.parse(JSON.stringify(CD)), plugins:{ legend:{ display:false } } }
+  });
+}
+
+// ─── TIMELINE ─────────────────────────────────────────────────────────────────
 function generateTimeline(data) {
   const grouped = {};
   data.forEach(d => {
-    const k = (d.Season||'?') + '|||' + (d.Team||'?');
-    if (!grouped[k]) grouped[k] = { season:d.Season, team:d.Team, sessions:0, goals:0, assists:0, ratings:[] };
+    const k = (d.Season||'?')+'|||'+(d.Team||'?');
+    if (!grouped[k]) grouped[k] = { season:d.Season, team:d.Team, sessions:0, goals:0, assists:0, ratings:[], wins:0, matches:0 };
     grouped[k].sessions++;
     grouped[k].goals   += Number(d.Goals||0);
     grouped[k].assists += Number(d.Assists||0);
     grouped[k].ratings.push(Number(d.Rating||0));
+    if (d.SessionType==='Match') { grouped[k].matches++; if(d.Outcome==='Win') grouped[k].wins++; }
   });
   document.getElementById('timeline').innerHTML = Object.values(grouped).map(item => {
     const avg = item.ratings.length ? (item.ratings.reduce((a,b)=>a+b,0)/item.ratings.length).toFixed(1) : '—';
+    const wr  = item.matches ? Math.round(item.wins/item.matches*100)+'%' : '—';
     return `<div class="timeline-club">
       <div style="font-size:10px;letter-spacing:0.1em;color:var(--muted);font-weight:600;margin-bottom:6px;">${item.season||'—'}</div>
       <div style="font-family:var(--font-display);font-size:28px;margin-bottom:10px;">${item.team||'—'}</div>
-      <div style="display:flex;gap:16px;font-size:12px;color:var(--muted);">
-        <span>📅 ${item.sessions} sess.</span>
-        <span>⚽ ${item.goals} gol</span>
-        <span>🎯 ${item.assists} ast</span>
-        <span>⭐ ${avg}</span>
+      <div style="display:flex;gap:12px;font-size:12px;color:var(--muted);flex-wrap:wrap;">
+        <span>📅 ${item.sessions} sess.</span><span>⚽ ${item.goals} gol</span>
+        <span>🎯 ${item.assists} ast</span><span>⭐ ${avg}</span><span>🏆 ${wr} win</span>
       </div>
     </div>`;
   }).join('');
@@ -1100,20 +1056,20 @@ function generateTimeline(data) {
 
 // ─── DEVELOPMENT ──────────────────────────────────────────────────────────────
 function generateDevelopment(data) {
-  function trendIcon(t) { return t==='Improving'?'<span class="trend-up">↑ Migliorando</span>':t==='Declining'?'<span class="trend-down">↓ Calando</span>':'<span class="trend-stable">→ Stabile</span>'; }
+  function ti(t) { return t==='Improving'?'<span class="trend-up">↑ Migliorando</span>':t==='Declining'?'<span class="trend-down">↓ Calando</span>':'<span class="trend-stable">→ Stabile</span>'; }
   const cards = [
-    { label:'Posizione Top', val: bestPosition(data), icon:'🏅' },
-    { label:'Avversario Top (Gol)', val: bestOpponent(data), icon:'🎯' },
-    { label:'Passaggio', val: trendIcon(trend(data,'PassingQuality')), icon:'🔵' },
-    { label:'Finalizzazione', val: trendIcon(trend(data,'FinishingQuality')), icon:'⚽' },
-    { label:'Fiducia', val: trendIcon(trend(data,'Confidence')), icon:'🧠' },
-    { label:'Recupero', val: trendIcon(trend(data,'RecoveryLevel')), icon:'❤️' },
-    { label:'Difesa', val: trendIcon(trend(data,'DefensivePerformance')), icon:'🛡' },
-    { label:'Velocità', val: trendIcon(trend(data,'SprintLevel')), icon:'⚡' },
-    { label:'Peak Rating', val: Math.max(...data.map(d=>Number(d.Rating||0))).toFixed(1), icon:'🏆' },
-    { label:'Min Rating', val: Math.min(...data.filter(d=>d.Rating).map(d=>Number(d.Rating||0))).toFixed(1), icon:'📉' },
-    { label:'% Titolare', val: Math.round(data.filter(d=>d.Starter==='Yes').length/data.length*100)+'%', icon:'🔵' },
-    { label:'Sess/Settimana', val: sessionsPerWeek(data), icon:'📅' },
+    { label:'Posizione Top',          val: bestPosition(data),    icon:'🏅' },
+    { label:'Avversario Top (Gol)',    val: bestOpponent(data),    icon:'🎯' },
+    { label:'Passaggio',              val: ti(trend(data,'PassingQuality')),     icon:'🔵' },
+    { label:'Finalizzazione',         val: ti(trend(data,'FinishingQuality')),   icon:'⚽' },
+    { label:'Fiducia',                val: ti(trend(data,'Confidence')),         icon:'🧠' },
+    { label:'Recupero',               val: ti(trend(data,'RecoveryLevel')),      icon:'❤️' },
+    { label:'Difesa',                 val: ti(trend(data,'DefensivePerformance')),icon:'🛡' },
+    { label:'Velocità',               val: ti(trend(data,'SprintLevel')),        icon:'⚡' },
+    { label:'Peak Rating',            val: data.length ? Math.max(...data.map(d=>Number(d.Rating||0))).toFixed(1) : '—', icon:'🏆' },
+    { label:'Min Rating',             val: data.filter(d=>d.Rating).length ? Math.min(...data.filter(d=>d.Rating).map(d=>Number(d.Rating))).toFixed(1) : '—', icon:'📉' },
+    { label:'% Titolare',             val: data.length ? Math.round(data.filter(d=>d.Starter==='Yes').length/data.length*100)+'%' : '0%', icon:'🔵' },
+    { label:'Sess/Settimana',         val: sessionsPerWeek(data), icon:'📅' },
   ];
   document.getElementById('developmentCards').innerHTML = cards.map(c=>`
     <div class="dev-card">
@@ -1122,30 +1078,29 @@ function generateDevelopment(data) {
     </div>`).join('');
 }
 
-// ─── CORRELATIONS (REAL PEARSON) ─────────────────────────────────────────────
+// ─── CORRELATIONS (PEARSON) ───────────────────────────────────────────────────
 function generateCorrelations(data) {
   const pairs = [
-    { a:'PhysicalCondition', b:'Rating',            labelA:'Fisico',     labelB:'Rating' },
-    { a:'Confidence',        b:'Goals',              labelA:'Fiducia',    labelB:'Gol' },
-    { a:'MentalCondition',   b:'Rating',             labelA:'Mentale',    labelB:'Rating' },
-    { a:'PassingQuality',    b:'Rating',             labelA:'Passaggio',  labelB:'Rating' },
-    { a:'SprintLevel',       b:'PhysicalCondition',  labelA:'Velocità',   labelB:'Fisico' },
-    { a:'RecoveryLevel',     b:'Rating',             labelA:'Recupero',   labelB:'Rating' },
+    { a:'PhysicalCondition', b:'Rating',           labelA:'Fisico',    labelB:'Rating' },
+    { a:'Confidence',        b:'Goals',             labelA:'Fiducia',   labelB:'Gol' },
+    { a:'MentalCondition',   b:'Rating',            labelA:'Mentale',   labelB:'Rating' },
+    { a:'PassingQuality',    b:'Rating',            labelA:'Passaggio', labelB:'Rating' },
+    { a:'SprintLevel',       b:'PhysicalCondition', labelA:'Velocità',  labelB:'Fisico' },
+    { a:'RecoveryLevel',     b:'Rating',            labelA:'Recupero',  labelB:'Rating' },
   ];
   const items = pairs.map(p => {
     const r = pearson(data, p.a, p.b);
     const abs = Math.abs(r);
-    const direction = r > 0 ? 'positiva' : 'negativa';
-    const strength = abs > 0.6 ? 'forte' : abs > 0.35 ? 'moderata' : abs > 0.15 ? 'debole' : 'assente';
-    const color = abs > 0.6 ? '#06d6a0' : abs > 0.35 ? '#f59e0b' : abs > 0.15 ? '#3b82f6' : '#ef4444';
-    const desc = abs > 0.6
-      ? `Relazione ${direction} ${strength}: quando ${p.labelA} aumenta, ${p.labelB} tende ${r>0?'ad aumentare':'a diminuire'} significativamente.`
-      : abs > 0.35
-      ? `Correlazione ${direction} ${strength} tra ${p.labelA} e ${p.labelB}. Tendenza presente ma non determinante.`
-      : `Correlazione ${direction} ${strength} tra ${p.labelA} e ${p.labelB}. I due parametri sono sostanzialmente indipendenti.`;
-    return { label:`${p.labelA} ↔ ${p.labelB}`, r, abs, color, desc };
+    const dir = r > 0 ? 'positiva' : 'negativa';
+    const str = abs>0.6?'forte':abs>0.35?'moderata':abs>0.15?'debole':'assente';
+    const col = abs>0.6?'#06d6a0':abs>0.35?'#f59e0b':abs>0.15?'#3b82f6':'#ef4444';
+    const desc = abs>0.6
+      ? `Relazione ${dir} ${str}: quando ${p.labelA} aumenta, ${p.labelB} tende ${r>0?'ad aumentare':'a diminuire'} significativamente.`
+      : abs>0.35
+      ? `Correlazione ${dir} ${str} tra ${p.labelA} e ${p.labelB}. Tendenza presente ma non determinante.`
+      : `Correlazione ${dir} ${str} tra ${p.labelA} e ${p.labelB}. I due parametri sono sostanzialmente indipendenti.`;
+    return { label:`${p.labelA} ↔ ${p.labelB}`, r, abs, color:col, desc };
   });
-
   document.getElementById('correlations').innerHTML = items.map(it=>`
     <div class="corr-item">
       <div class="corr-label">${it.label}</div>
@@ -1153,11 +1108,9 @@ function generateCorrelations(data) {
       <div class="corr-bar-track"><div class="corr-bar" style="width:${Math.round(it.abs*100)}%;background:${it.color};"></div></div>
       <div class="corr-desc">${it.desc}</div>
     </div>`).join('');
-
-  // Global insight
-  const strongest = items.reduce((a,b) => a.abs > b.abs ? a : b);
+  const strongest = items.reduce((a,b)=>a.abs>b.abs?a:b);
   document.getElementById('correlationInsight').innerHTML =
-    `<strong>Correlazione più forte rilevata:</strong> ${strongest.label} con r = ${strongest.r.toFixed(2)}. ${strongest.desc}`;
+    `<strong>Correlazione più forte:</strong> ${strongest.label} con r = ${strongest.r.toFixed(2)}. ${strongest.desc}`;
 }
 
 // ─── ACHIEVEMENTS ─────────────────────────────────────────────────────────────
@@ -1167,38 +1120,34 @@ function generateAchievements(data) {
   const matches = data.filter(d=>d.SessionType==='Match');
   const wins    = matches.filter(d=>d.Outcome==='Win').length;
   const avgRat  = parseFloat(average(data,'Rating'));
-  const peakRat = Math.max(...data.map(d=>Number(d.Rating||0)));
+  const peakRat = data.length ? Math.max(...data.map(d=>Number(d.Rating||0))) : 0;
   const minutes = sum(data,'Minutes');
+  const homeW   = matches.filter(d=>d.Venue==='Home'&&d.Outcome==='Win').length;
+  const awayW   = matches.filter(d=>d.Venue==='Away'&&d.Outcome==='Win').length;
   const achs = [];
-
-  if (goals >= 1)   achs.push({ icon:'⚽', name:'Primo Gol', desc:'Hai segnato il tuo primo gol' });
-  if (goals >= 5)   achs.push({ icon:'🔥', name:'5 Gol', desc:'Cinque reti in carriera' });
-  if (goals >= 10)  achs.push({ icon:'💥', name:'10 Gol', desc:'Bomber a doppia cifra!' });
-  if (goals >= 25)  achs.push({ icon:'👑', name:'25 Gol', desc:'Vero realizzatore' });
-  if (assists >= 5) achs.push({ icon:'🎯', name:'5 Assist', desc:'Maestro della creatività' });
-  if (assists >= 10)achs.push({ icon:'🪄', name:'10 Assist', desc:'Assistman di élite' });
-  if (avgRat >= 7)  achs.push({ icon:'⭐', name:'Elite Average', desc:'Media sopra 7.0' });
-  if (avgRat >= 8)  achs.push({ icon:'🌟', name:'Superstar', desc:'Media sopra 8.0' });
-  if (peakRat >= 9) achs.push({ icon:'🚀', name:'Perfezionista', desc:'Voto ≥9 in una sessione' });
-  if (wins >= 5)    achs.push({ icon:'🏆', name:'5 Vittorie', desc:'Cinque partite vinte' });
-  if (wins >= 10)   achs.push({ icon:'🥇', name:'10 Vittorie', desc:'Campione di categoria' });
-  if (data.length >= 10) achs.push({ icon:'📅', name:'Veterano', desc:'10+ sessioni registrate' });
-  if (data.length >= 50) achs.push({ icon:'🗓', name:'Carriera Lunga', desc:'50+ sessioni registrate' });
-  if (minutes >= 900) achs.push({ icon:'⏱', name:'900 Minuti', desc:'Oltre 900 minuti giocati' });
-  const ga = goals + assists;
-  if (ga >= 10) achs.push({ icon:'🎭', name:'10 G+A', desc:'10 contributi offensivi totali' });
-  if (ga >= 25) achs.push({ icon:'💎', name:'25 G+A', desc:'25 contributi offensivi!' });
+  if (goals>=1)   achs.push({ icon:'⚽', name:'Primo Gol',       desc:'Hai segnato il tuo primo gol' });
+  if (goals>=5)   achs.push({ icon:'🔥', name:'5 Gol',           desc:'Cinque reti in carriera' });
+  if (goals>=10)  achs.push({ icon:'💥', name:'10 Gol',          desc:'Bomber a doppia cifra!' });
+  if (goals>=25)  achs.push({ icon:'👑', name:'25 Gol',          desc:'Vero realizzatore' });
+  if (assists>=5) achs.push({ icon:'🎯', name:'5 Assist',        desc:'Maestro della creatività' });
+  if (assists>=10)achs.push({ icon:'🪄', name:'10 Assist',       desc:'Assistman di élite' });
+  if (avgRat>=7)  achs.push({ icon:'⭐', name:'Elite Average',   desc:'Media sopra 7.0' });
+  if (avgRat>=8)  achs.push({ icon:'🌟', name:'Superstar',       desc:'Media sopra 8.0' });
+  if (peakRat>=9) achs.push({ icon:'🚀', name:'Perfezionista',   desc:'Voto ≥9 in una sessione' });
+  if (wins>=5)    achs.push({ icon:'🏆', name:'5 Vittorie',      desc:'Cinque partite vinte' });
+  if (wins>=10)   achs.push({ icon:'🥇', name:'10 Vittorie',     desc:'Campione di categoria' });
+  if (homeW>=5)   achs.push({ icon:'🏠', name:'Re del Campo',    desc:'5+ vittorie in casa' });
+  if (awayW>=3)   achs.push({ icon:'✈️', name:'Guerriero',       desc:'3+ vittorie in trasferta' });
+  if (data.length>=10) achs.push({ icon:'📅', name:'Veterano',   desc:'10+ sessioni registrate' });
+  if (data.length>=50) achs.push({ icon:'🗓', name:'Maratoneta',  desc:'50+ sessioni registrate' });
+  if (minutes>=900)    achs.push({ icon:'⏱', name:'900 Minuti',  desc:'Oltre 900 minuti giocati' });
+  if (goals+assists>=10) achs.push({ icon:'🎭', name:'10 G+A',   desc:'10 contributi offensivi totali' });
+  if (goals+assists>=25) achs.push({ icon:'💎', name:'25 G+A',   desc:'25 contributi offensivi!' });
   const seasons = [...new Set(data.map(d=>d.Season))];
-  if (seasons.length >= 2) achs.push({ icon:'📆', name:'Multi-Stagione', desc:'Dati su 2+ stagioni' });
-
+  if (seasons.length>=2) achs.push({ icon:'📆', name:'Multi-Stagione', desc:'Dati su 2+ stagioni' });
   if (!achs.length) achs.push({ icon:'🌱', name:'Inizia!', desc:'Carica più dati per sbloccare traguardi' });
-
   document.getElementById('achievements').innerHTML = achs.map(a=>`
-    <div class="ach">
-      <div class="icon">${a.icon}</div>
-      <div class="ach-name">${a.name}</div>
-      <div class="ach-desc">${a.desc}</div>
-    </div>`).join('');
+    <div class="ach"><div class="icon">${a.icon}</div><div class="ach-name">${a.name}</div><div class="ach-desc">${a.desc}</div></div>`).join('');
 }
 
 // ─── TABLE ────────────────────────────────────────────────────────────────────
@@ -1206,12 +1155,18 @@ function generateTable(data) {
   document.getElementById('tableBody').innerHTML = data.map(item => {
     const outcome = item.Outcome || '';
     const cls = outcome==='Win'?'result-w':outcome==='Draw'?'result-d':outcome==='Loss'?'result-l':'';
+    const venueHtml = item.Venue==='Home'?'<span class="venue-home">🏠 Casa</span>':item.Venue==='Away'?'<span class="venue-away">✈️ Trasferta</span>':'—';
+    const scoreHtml = (item.ScoreUs!==undefined && item.ScoreThem!==undefined && item.SessionType==='Match')
+      ? `<strong>${item.ScoreUs}-${item.ScoreThem}</strong>` : '—';
     return `<tr>
       <td>${item.Date||''}</td>
       <td>${item.Season||''}</td>
       <td>${item.SessionType||''}</td>
       <td>${item.Team||''}</td>
       <td>${item.Opponent||'—'}</td>
+      <td>${venueHtml}</td>
+      <td>${outcome?`<span class="result-badge ${cls}">${outcome==='Win'?'V':outcome==='Draw'?'N':'S'}</span>`:'—'}</td>
+      <td>${scoreHtml}</td>
       <td>${item.Position||''}</td>
       <td>${item.Starter||''}</td>
       <td>${item.Goals||0}</td>
@@ -1221,7 +1176,6 @@ function generateTable(data) {
       <td>${item.MentalCondition||0}</td>
       <td>${item.Confidence||0}</td>
       <td>${item.Minutes||0}</td>
-      <td>${outcome ? `<span class="result-badge ${cls}">${outcome==='Win'?'V':outcome==='Draw'?'N':'S'}</span>` : '—'}</td>
     </tr>`;
   }).join('');
 }
@@ -1257,86 +1211,77 @@ function exportSocialCard() {
 }
 
 // ─── MATH HELPERS ─────────────────────────────────────────────────────────────
-function sum(arr, key) { return arr.reduce((a,i)=>a+Number(i[key]||0),0); }
-function average(arr, key) { if(!arr.length) return 0; return (sum(arr,key)/arr.length).toFixed(1); }
-
-function overall(data) {
-  return ((Number(average(data,'Rating'))*10 + Number(average(data,'PhysicalCondition'))*5 + Number(average(data,'Confidence'))*5)/2).toFixed(0);
-}
-
-function consistency(data) {
-  const r = data.map(d=>Number(d.Rating||0));
-  if (!r.length) return '0%';
-  const avg = r.reduce((a,b)=>a+b,0)/r.length;
-  const variance = r.reduce((a,b)=>a+Math.pow(b-avg,2),0)/r.length;
-  return Math.max(0,(100-variance*10)).toFixed(0)+'%';
-}
-
-function starterAverage(data) { return average(data.filter(d=>d.Starter==='Yes'),'Rating'); }
-function subAverage(data)     { return average(data.filter(d=>d.Starter==='No'),'Rating'); }
-
-function goalsPer90(data) {
-  const mins = sum(data,'Minutes');
-  if (!mins) return 0;
-  return ((sum(data,'Goals')/mins)*90).toFixed(2);
-}
-
-function bestPosition(data) {
-  const map = {}; data.forEach(d=>{ const p=d.Position||'?'; map[p]=(map[p]||0)+1; });
-  const keys = Object.keys(map); return keys.length ? keys.reduce((a,b)=>map[a]>map[b]?a:b) : '—';
-}
-
-function bestOpponent(data) {
-  const map = {}; data.forEach(d=>{ if(d.Opponent) map[d.Opponent]=(map[d.Opponent]||0)+Number(d.Goals||0); });
-  const keys = Object.keys(map); return keys.length ? keys.reduce((a,b)=>map[a]>map[b]?a:b) : '—';
-}
-
-function trend(arr, key) {
-  if (arr.length < 2) return 'Stable';
-  const first = Number(arr[0][key]||0), last = Number(arr[arr.length-1][key]||0);
-  return last > first ? 'Improving' : last < first ? 'Declining' : 'Stable';
-}
-
-function sessionsPerWeek(data) {
-  if (data.length < 2) return '—';
-  const dates = data.map(d=>new Date(d.Date)).filter(d=>!isNaN(d)).sort((a,b)=>a-b);
-  if (dates.length < 2) return '—';
-  const weeks = (dates[dates.length-1]-dates[0])/(1000*60*60*24*7) || 1;
-  return (data.length/weeks).toFixed(1);
-}
-
-// Pearson correlation coefficient
-function pearson(data, keyA, keyB) {
-  const n = data.length;
-  if (n < 2) return 0;
-  const a = data.map(d=>Number(d[keyA]||0));
-  const b = data.map(d=>Number(d[keyB]||0));
-  const ma = a.reduce((x,y)=>x+y,0)/n;
-  const mb = b.reduce((x,y)=>x+y,0)/n;
-  const num   = a.reduce((s,_,i)=>s+(a[i]-ma)*(b[i]-mb),0);
-  const denA  = Math.sqrt(a.reduce((s,v)=>s+Math.pow(v-ma,2),0));
-  const denB  = Math.sqrt(b.reduce((s,v)=>s+Math.pow(v-mb,2),0));
-  if (!denA || !denB) return 0;
-  return Math.max(-1, Math.min(1, num/(denA*denB)));
-}
+function sum(arr,key)     { return arr.reduce((a,i)=>a+Number(i[key]||0),0); }
+function average(arr,key) { if(!arr.length) return 0; return (sum(arr,key)/arr.length).toFixed(1); }
+function overall(data)    { return ((Number(average(data,'Rating'))*10+Number(average(data,'PhysicalCondition'))*5+Number(average(data,'Confidence'))*5)/2).toFixed(0); }
+function consistency(data){ const r=data.map(d=>Number(d.Rating||0)); if(!r.length)return'0%'; const avg=r.reduce((a,b)=>a+b,0)/r.length; const v=r.reduce((a,b)=>a+Math.pow(b-avg,2),0)/r.length; return Math.max(0,(100-v*10)).toFixed(0)+'%'; }
+function starterAverage(data){ return average(data.filter(d=>d.Starter==='Yes'),'Rating'); }
+function subAverage(data)    { return average(data.filter(d=>d.Starter==='No'),'Rating'); }
+function goalsPer90(data)    { const m=sum(data,'Minutes'); if(!m)return 0; return((sum(data,'Goals')/m)*90).toFixed(2); }
+function bestPosition(data)  { const m={}; data.forEach(d=>{const p=d.Position||'?';m[p]=(m[p]||0)+1;}); const k=Object.keys(m); return k.length?k.reduce((a,b)=>m[a]>m[b]?a:b):'—'; }
+function bestOpponent(data)  { const m={}; data.forEach(d=>{if(d.Opponent)m[d.Opponent]=(m[d.Opponent]||0)+Number(d.Goals||0);}); const k=Object.keys(m); return k.length?k.reduce((a,b)=>m[a]>m[b]?a:b):'—'; }
+function trend(arr,key)      { if(arr.length<2)return'Stable'; const f=Number(arr[0][key]||0),l=Number(arr[arr.length-1][key]||0); return l>f?'Improving':l<f?'Declining':'Stable'; }
+function sessionsPerWeek(data){ if(data.length<2)return'—'; const d=data.map(d=>new Date(d.Date)).filter(d=>!isNaN(d)).sort((a,b)=>a-b); if(d.length<2)return'—'; const w=(d[d.length-1]-d[0])/(1000*60*60*24*7)||1; return(data.length/w).toFixed(1); }
+function pearson(data,keyA,keyB){ const n=data.length; if(n<2)return 0; const a=data.map(d=>Number(d[keyA]||0)),b=data.map(d=>Number(d[keyB]||0)); const ma=a.reduce((x,y)=>x+y,0)/n,mb=b.reduce((x,y)=>x+y,0)/n; const num=a.reduce((s,_,i)=>s+(a[i]-ma)*(b[i]-mb),0); const dA=Math.sqrt(a.reduce((s,v)=>s+Math.pow(v-ma,2),0)),dB=Math.sqrt(b.reduce((s,v)=>s+Math.pow(v-mb,2),0)); if(!dA||!dB)return 0; return Math.max(-1,Math.min(1,num/(dA*dB))); }
 
 // ─── TEMPLATE DOWNLOAD ────────────────────────────────────────────────────────
 function downloadTemplate() {
   const exampleData = [
-    { Date:"2024-08-20", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Gaiole", Position:"CM", Starter:"Yes", Goals:1, Assists:1, Rating:7.5, PhysicalCondition:8, MentalCondition:7, Confidence:8, PassingQuality:7, FinishingQuality:8, DefensivePerformance:6, SprintLevel:8, RecoveryLevel:7, Minutes:90, Outcome:"Win"  },
-    { Date:"2024-08-24", Season:"2024/25", SessionType:"Training", Team:"Malva", Opponent:"",       Position:"CM", Starter:"No",  Goals:0, Assists:0, Rating:6.8, PhysicalCondition:7, MentalCondition:8, Confidence:8, PassingQuality:8, FinishingQuality:7, DefensivePerformance:7, SprintLevel:9, RecoveryLevel:8, Minutes:90, Outcome:""     },
-    { Date:"2024-09-01", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Siena",  Position:"CM", Starter:"Yes", Goals:2, Assists:0, Rating:8.2, PhysicalCondition:9, MentalCondition:8, Confidence:9, PassingQuality:8, FinishingQuality:9, DefensivePerformance:7, SprintLevel:8, RecoveryLevel:8, Minutes:90, Outcome:"Win"  },
-    { Date:"2024-09-05", Season:"2024/25", SessionType:"Training", Team:"Malva", Opponent:"",       Position:"CM", Starter:"No",  Goals:0, Assists:0, Rating:7,   PhysicalCondition:8, MentalCondition:8, Confidence:8, PassingQuality:8, FinishingQuality:8, DefensivePerformance:7, SprintLevel:8, RecoveryLevel:8, Minutes:90, Outcome:""     },
-    { Date:"2024-09-12", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Pisa",   Position:"CM", Starter:"Yes", Goals:1, Assists:2, Rating:8.5, PhysicalCondition:9, MentalCondition:9, Confidence:9, PassingQuality:9, FinishingQuality:8, DefensivePerformance:7, SprintLevel:9, RecoveryLevel:9, Minutes:90, Outcome:"Win"  },
-    { Date:"2024-09-20", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Empoli", Position:"CM", Starter:"Yes", Goals:0, Assists:1, Rating:7.2, PhysicalCondition:7, MentalCondition:7, Confidence:7, PassingQuality:8, FinishingQuality:6, DefensivePerformance:8, SprintLevel:7, RecoveryLevel:7, Minutes:90, Outcome:"Draw" },
-    { Date:"2024-09-25", Season:"2024/25", SessionType:"Training", Team:"Malva", Opponent:"",       Position:"CM", Starter:"No",  Goals:0, Assists:0, Rating:7.1, PhysicalCondition:8, MentalCondition:8, Confidence:8, PassingQuality:8, FinishingQuality:7, DefensivePerformance:7, SprintLevel:8, RecoveryLevel:8, Minutes:90, Outcome:""     },
-    { Date:"2024-10-01", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Livorno",Position:"CM", Starter:"Yes", Goals:1, Assists:1, Rating:8,   PhysicalCondition:8, MentalCondition:9, Confidence:9, PassingQuality:9, FinishingQuality:8, DefensivePerformance:8, SprintLevel:8, RecoveryLevel:9, Minutes:90, Outcome:"Win"  },
-    { Date:"2024-10-10", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Gaiole", Position:"CM", Starter:"Yes", Goals:0, Assists:0, Rating:6.5, PhysicalCondition:6, MentalCondition:6, Confidence:6, PassingQuality:6, FinishingQuality:5, DefensivePerformance:6, SprintLevel:6, RecoveryLevel:6, Minutes:45, Outcome:"Loss" },
-    { Date:"2024-10-18", Season:"2024/25", SessionType:"Training", Team:"Malva", Opponent:"",       Position:"CM", Starter:"No",  Goals:0, Assists:0, Rating:7.3, PhysicalCondition:8, MentalCondition:8, Confidence:8, PassingQuality:8, FinishingQuality:8, DefensivePerformance:7, SprintLevel:9, RecoveryLevel:8, Minutes:90, Outcome:""     },
-    { Date:"2024-10-25", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Siena",  Position:"CAM",Starter:"Yes", Goals:2, Assists:1, Rating:9.0, PhysicalCondition:9, MentalCondition:9, Confidence:9, PassingQuality:9, FinishingQuality:9, DefensivePerformance:7, SprintLevel:9, RecoveryLevel:9, Minutes:90, Outcome:"Win"  },
-    { Date:"2024-11-02", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Pisa",   Position:"CM", Starter:"No",  Goals:1, Assists:0, Rating:7.8, PhysicalCondition:7, MentalCondition:8, Confidence:8, PassingQuality:8, FinishingQuality:8, DefensivePerformance:6, SprintLevel:8, RecoveryLevel:7, Minutes:30, Outcome:"Draw" },
+    { Date:"2024-08-20", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Gaiole",  Venue:"Home", ScoreUs:3, ScoreThem:1, Position:"CM",  Starter:"Yes", Goals:1, Assists:1, Rating:7.5, PhysicalCondition:8, MentalCondition:7, Confidence:8, PassingQuality:7, FinishingQuality:8, DefensivePerformance:6, SprintLevel:8, RecoveryLevel:7, Minutes:90, Outcome:"Win"  },
+    { Date:"2024-08-24", Season:"2024/25", SessionType:"Training", Team:"Malva", Opponent:"",        Venue:"",     ScoreUs:"", ScoreThem:"", Position:"CM", Starter:"No",  Goals:0, Assists:0, Rating:6.8, PhysicalCondition:7, MentalCondition:8, Confidence:8, PassingQuality:8, FinishingQuality:7, DefensivePerformance:7, SprintLevel:9, RecoveryLevel:8, Minutes:90, Outcome:""     },
+    { Date:"2024-09-01", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Siena",   Venue:"Away", ScoreUs:2, ScoreThem:0, Position:"CM",  Starter:"Yes", Goals:2, Assists:0, Rating:8.2, PhysicalCondition:9, MentalCondition:8, Confidence:9, PassingQuality:8, FinishingQuality:9, DefensivePerformance:7, SprintLevel:8, RecoveryLevel:8, Minutes:90, Outcome:"Win"  },
+    { Date:"2024-09-05", Season:"2024/25", SessionType:"Training", Team:"Malva", Opponent:"",        Venue:"",     ScoreUs:"", ScoreThem:"", Position:"CM", Starter:"No",  Goals:0, Assists:0, Rating:7,   PhysicalCondition:8, MentalCondition:8, Confidence:8, PassingQuality:8, FinishingQuality:8, DefensivePerformance:7, SprintLevel:8, RecoveryLevel:8, Minutes:90, Outcome:""     },
+    { Date:"2024-09-12", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Pisa",    Venue:"Home", ScoreUs:2, ScoreThem:1, Position:"CM",  Starter:"Yes", Goals:1, Assists:2, Rating:8.5, PhysicalCondition:9, MentalCondition:9, Confidence:9, PassingQuality:9, FinishingQuality:8, DefensivePerformance:7, SprintLevel:9, RecoveryLevel:9, Minutes:90, Outcome:"Win"  },
+    { Date:"2024-09-20", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Empoli",  Venue:"Away", ScoreUs:1, ScoreThem:1, Position:"CM",  Starter:"Yes", Goals:0, Assists:1, Rating:7.2, PhysicalCondition:7, MentalCondition:7, Confidence:7, PassingQuality:8, FinishingQuality:6, DefensivePerformance:8, SprintLevel:7, RecoveryLevel:7, Minutes:90, Outcome:"Draw" },
+    { Date:"2024-09-25", Season:"2024/25", SessionType:"Training", Team:"Malva", Opponent:"",        Venue:"",     ScoreUs:"", ScoreThem:"", Position:"CM", Starter:"No",  Goals:0, Assists:0, Rating:7.1, PhysicalCondition:8, MentalCondition:8, Confidence:8, PassingQuality:8, FinishingQuality:7, DefensivePerformance:7, SprintLevel:8, RecoveryLevel:8, Minutes:90, Outcome:""     },
+    { Date:"2024-10-01", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Livorno", Venue:"Home", ScoreUs:3, ScoreThem:0, Position:"CM",  Starter:"Yes", Goals:1, Assists:1, Rating:8,   PhysicalCondition:8, MentalCondition:9, Confidence:9, PassingQuality:9, FinishingQuality:8, DefensivePerformance:8, SprintLevel:8, RecoveryLevel:9, Minutes:90, Outcome:"Win"  },
+    { Date:"2024-10-10", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Gaiole",  Venue:"Away", ScoreUs:0, ScoreThem:2, Position:"CM",  Starter:"Yes", Goals:0, Assists:0, Rating:6.5, PhysicalCondition:6, MentalCondition:6, Confidence:6, PassingQuality:6, FinishingQuality:5, DefensivePerformance:6, SprintLevel:6, RecoveryLevel:6, Minutes:45, Outcome:"Loss" },
+    { Date:"2024-10-18", Season:"2024/25", SessionType:"Training", Team:"Malva", Opponent:"",        Venue:"",     ScoreUs:"", ScoreThem:"", Position:"CM", Starter:"No",  Goals:0, Assists:0, Rating:7.3, PhysicalCondition:8, MentalCondition:8, Confidence:8, PassingQuality:8, FinishingQuality:8, DefensivePerformance:7, SprintLevel:9, RecoveryLevel:8, Minutes:90, Outcome:""     },
+    { Date:"2024-10-25", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Siena",   Venue:"Home", ScoreUs:4, ScoreThem:1, Position:"CAM", Starter:"Yes", Goals:2, Assists:1, Rating:9.0, PhysicalCondition:9, MentalCondition:9, Confidence:9, PassingQuality:9, FinishingQuality:9, DefensivePerformance:7, SprintLevel:9, RecoveryLevel:9, Minutes:90, Outcome:"Win"  },
+    { Date:"2024-11-02", Season:"2024/25", SessionType:"Match",    Team:"Malva", Opponent:"Pisa",    Venue:"Away", ScoreUs:1, ScoreThem:1, Position:"CM",  Starter:"No",  Goals:1, Assists:0, Rating:7.8, PhysicalCondition:7, MentalCondition:8, Confidence:8, PassingQuality:8, FinishingQuality:8, DefensivePerformance:6, SprintLevel:8, RecoveryLevel:7, Minutes:30, Outcome:"Draw" },
   ];
+
   const ws = XLSX.utils.json_to_sheet(exampleData);
+
+  // Aggiungi commenti/note alle intestazioni per guidare l'utente
+  const colNotes = {
+    A1:'Data formato YYYY-MM-DD (es: 2024-09-15)',
+    B1:'Stagione es: 2024/25',
+    C1:'Match oppure Training',
+    D1:'Nome della tua squadra',
+    E1:'Nome avversario (solo per Match, lascia vuoto per Training)',
+    F1:'Home = casa  |  Away = trasferta  |  vuoto se Training',
+    G1:'Gol fatti dalla TUA SQUADRA (es: 3). Vuoto se Training.',
+    H1:'Gol subiti dalla TUA SQUADRA (es: 1). Vuoto se Training.',
+    I1:'Ruolo: GK CB LB RB CDM CM CAM LW RW CF ST',
+    J1:'Yes = titolare  |  No = partito dalla panchina',
+    K1:'Tuoi gol personali (numero intero)',
+    L1:'Tuoi assist personali (numero intero)',
+    M1:'Il tuo voto da 1 a 10 (es: 7.5)',
+    N1:'Condizione fisica da 1 a 10',
+    O1:'Condizione mentale da 1 a 10',
+    P1:'Fiducia in te stesso da 1 a 10',
+    Q1:'Qualità passaggi da 1 a 10',
+    R1:'Qualità finalizzazione da 1 a 10',
+    S1:'Performance difensiva da 1 a 10',
+    T1:'Livello velocità/sprint da 1 a 10',
+    U1:'Livello recupero da 1 a 10',
+    V1:'Minuti giocati o allenati (es: 90)',
+    W1:'Win = vittoria  |  Draw = pareggio  |  Loss = sconfitta  |  vuoto se Training',
+  };
+  if (!ws['!comments']) ws['!comments'] = {};
+  Object.entries(colNotes).forEach(([cell, note]) => {
+    ws['!comments'][cell] = [{ a:'PlayerLab', t: note }];
+  });
+
+  // Larghezze colonne
+  ws['!cols'] = [
+    {wch:12},{wch:10},{wch:12},{wch:12},{wch:12},{wch:10},
+    {wch:10},{wch:10},{wch:8},{wch:8},{wch:6},{wch:6},
+    {wch:7},{wch:18},{wch:16},{wch:11},{wch:14},{wch:16},
+    {wch:20},{wch:12},{wch:14},{wch:8},{wch:8}
+  ];
+
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'PlayerLab');
   XLSX.writeFile(wb, 'playerlab-template.xlsx');
